@@ -4,6 +4,7 @@ import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
 import 'package:robot_platform/services/camera_service.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -13,6 +14,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  String frontUrl = "player.bilibili.com/player.html?aid=798120006&bvid=BV1yy4y1S7VL&cid=265166166&page=1";
+  final VlcPlayerController controller = VlcPlayerController();
+  final double playerWidth = 640;
+  final double playerHeight = 368;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +34,8 @@ class _HomePageState extends State<HomePage> {
             MyButtonWithIcon(
               text: "获取图像url",
               onPressed: () => _getFrontCameraUrl(),
-            )
+            ),
+            _displayFrontCamera(),
           ],
         ),
       ),
@@ -52,11 +60,26 @@ class _HomePageState extends State<HomePage> {
 
   _getFrontCameraUrl(){
     getCameraUrl().then((value){
-      print(value.data["param "]);
+      print(value.data["param"]["frontUrl"]);
+      setState(() {
+        this.frontUrl = value.data["param"]["frontUrl"];
+      });
     }).catchError((err){
       print("error: $err");
     });
+  }
 
+  _displayFrontCamera() {
+    return SizedBox(
+      height: this.playerHeight,
+      width: this.playerWidth,
+      child: VlcPlayer(
+        aspectRatio: 16 / 9,
+        url: this.frontUrl,
+        controller: controller,
+        placeholder: Center(child: CircularProgressIndicator(),),
+      ),
+    );
   }
 
 }
