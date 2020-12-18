@@ -3,12 +3,15 @@ import './redux/models/theme_model.dart';
 import './redux/actions/theme_action.dart';
 import './redux/actions/session_action.dart';
 import './redux/models/session_model.dart';
+import './redux/models/message_model.dart';
+import 'redux/actions/message_action.dart';
 
 class MainState {
   ThemeModel themeState;
   SessionModel sessionState;
+  MessageModel messageState;
 
-  MainState({this.themeState, this.sessionState});
+  MainState({this.themeState, this.sessionState, this.messageState});
 
   /*
   构造方法初始化 MainState
@@ -16,6 +19,7 @@ class MainState {
   MainState.initialState(bool isLogin) {
     themeState = ThemeModel(themeData: ThemeData.light());
     sessionState = SessionModel(isLogin: isLogin);
+    messageState = MessageModel(messageList: [{"testMessage": "testMessage"}]);
   }
 }
 
@@ -26,5 +30,6 @@ MainState mainReducer(MainState state, action) {
   return MainState(
     themeState: themeReducer(state.themeState, action),
     sessionState: sessionReducer(state.sessionState, action),
+    messageState: messageReducer(state.messageState, action),
   );
 }

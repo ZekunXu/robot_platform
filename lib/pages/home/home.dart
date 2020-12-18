@@ -1,10 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:robot_platform/services/wanwei_websocket_service.dart';
 import 'package:robot_platform/widgets/common_button_with_icon.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
 import 'package:robot_platform/services/camera_service.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:flutter_ijkplayer/flutter_ijkplayer.dart';
+import 'package:robot_platform/services/log_service.dart';
+import 'package:robot_platform/configs/configure_global_param.dart';
+import 'package:robot_platform/pages/home/robot_info_widget.dart';
+import 'alarm_widget.dart';
+import 'web_cam_widget.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -15,71 +22,122 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  String frontUrl = "player.bilibili.com/player.html?aid=798120006&bvid=BV1yy4y1S7VL&cid=265166166&page=1";
-  final VlcPlayerController controller = VlcPlayerController();
-  final double playerWidth = 640;
-  final double playerHeight = 368;
+  String frontUrl = "rtmp://www.anbotcloud.com:1936/live/20WV450008/front/b7c25b654652495fbcdd5098c5589e91";
+  String backUrl = "rtmp://www.anbotcloud.com:1936/live/20WV450008/back/b7c25b654652495fbcdd5098c5589e91";
+  String yingShiUrl = "rtmp://rtmp01open.ys7.com/openlive/fc06ca5771e84b5583cbc5e35bdde861";
+  IjkMediaController controller = IjkMediaController();
+  final double playerWidth = double.maxFinite;
+  final double playerHeight = 200;
+  final List<String> alarmMessage1 = [
+    "这是第一条报警信息",
+    "This is the second alarm message from robot 2",
+    "Robot3 complete its task",
+  ];
+
+  final List<String> alarmMessage2 = [
+    "7号门烟感正常",
+  ];
+
+  final List<String> alarmMessage3 = [
+    "检测到黑名单人员侵入！！！",
+    "7号门火警检测异常！！！",
+  ];
+
+  @override
+  void initState() {
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.navigation),
+        onPressed: (){},
+      ),
     body: SafeArea(
-      child: Center(
-        child: Column(
-          children: [
-            MyButtonWithIcon(
-              text: "建立连接",
-              onPressed: () => _connectWebSocket(),
-            ),
-            MyButtonWithIcon(
-              text: "获取图像url",
-              onPressed: () => _getFrontCameraUrl(),
-            ),
-            _displayFrontCamera(),
-          ],
+      child: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RobotInfoWidget(),
+              Padding(padding: EdgeInsets.only(top: 20)),
+              _displayFrontCamera(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  MyButtonWithIcon(
+                    text: "前置摄像头",
+                    onPressed: ()=> getInstanceMessage(),
+                  ),
+                  MyButtonWithIcon(
+                  text: "后置摄像头",
+                    onPressed: ()=> _getFrontCameraUrl(url: yingShiUrl),
+                  )
+                ],
+              ),
+              Padding(padding: EdgeInsets.only(top: 20)),
+              WebCamWidget(),
+              Padding(padding: EdgeInsets.only(top: 20)),
+              AlarmWidget(title: "重要警报", alarmMessage: alarmMessage3, messageColor: Colors.red,),
+              Padding(padding: EdgeInsets.only(top: 20)),
+              AlarmWidget(title: "环境感知", alarmMessage: alarmMessage2,),
+              Padding(padding: EdgeInsets.only(top: 20)),
+              AlarmWidget(title: "安防探测",alarmMessage: alarmMessage1,),
+            ],
+          ),
         ),
       ),
     ),);
   }
 
 
-  _connectWebSocket(){
-    final String webSocket = "ws://www.anbotcloud.com:8180/anbotwebsocket/1b8f1ebd1c88431a9a1f3b6d23229655/1.0.0";
-
-    WebSocketChannel channel = IOWebSocketChannel.connect(webSocket);
-
-    channel.stream.listen((event) {
-      if(event != "ping"){
-        Map<String, dynamic> response = jsonDecode(event);
-        print(response);
-        print(response.runtimeType);
-        print("----------------");
-      }
-    });
+  _connectWebSocket() async {
+    getInstanceMessage();
   }
 
-  _getFrontCameraUrl(){
-    getCameraUrl().then((value){
-      print(value.data["param"]["frontUrl"]);
-      setState(() {
-        this.frontUrl = value.data["param"]["frontUrl"];
-      });
-    }).catchError((err){
-      print("error: $err");
+  _getFrontCameraUrl({@required String url}) async {
+    getCameraUrl(robotId: GlobalParam.ROBOT_1_FLOOR).then((value){
+      print(value.data["param"]);
     });
+    await controller.stop();
+    await controller.setNetworkDataSource(url);
+    await controller.play();
   }
 
   _displayFrontCamera() {
     return SizedBox(
       height: this.playerHeight,
       width: this.playerWidth,
-      child: VlcPlayer(
-        aspectRatio: 16 / 9,
-        url: this.frontUrl,
-        controller: controller,
-        placeholder: Center(child: CircularProgressIndicator(),),
+      child: IjkPlayer(
+        mediaController: controller,
       ),
     );
+  }
+
+  _getAllMapsInfo() async {
+    final String robotId = "19WV430010";
+    final String date = "2020-12-11";
+    getHistoryLog(robotId: robotId, date: date).then((value){
+      print(value.data);
+    });
+  }
+
+  _initUrlAddress() async {
+    getCameraUrl(robotId: GlobalParam.ROBOT_1_FLOOR).then((value){
+      setState(() {
+        frontUrl = value.data["param"]["frontUrl"];
+      });
+    });
   }
 
 }

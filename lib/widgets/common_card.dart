@@ -12,10 +12,10 @@ class MyCard extends StatefulWidget {
   /// [margin] 继承了 [Card] 的内边距，非必填，可以改变内边距。
 
   final Widget child;
-  final EdgeInsets margin;
   final BoxBorder border;
+  final double height;
 
-  MyCard({Key key, @required this.child, this.margin, this.border}) : super(key: key);
+  MyCard({Key key, @required this.child, this.border, this.height}) : super(key: key);
   _MyCardState createState ()=> _MyCardState();
 }
 
@@ -24,22 +24,23 @@ class _MyCardState extends State<MyCard> {
   Widget build(BuildContext context) {
     return Container(
       width: double.maxFinite,
+      height: widget.height ?? null,
       decoration: BoxDecoration(
         border: widget.border ?? null,
-        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        borderRadius: BorderRadius.all(Radius.circular(15.0)),
         boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.16),
-            offset: Offset(0.0, 0.3),
+            color: Color.fromRGBO(197, 198, 199, 0.25),
+            offset: Offset(0.0, 3.0),
             blurRadius: 5.0,
           ),
         ],
       ),
       child: Card(
+        elevation: 0.0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
         ),
-        margin: widget.margin ?? const EdgeInsets.all(0.0),
         child: widget.child,
       ),
     );
