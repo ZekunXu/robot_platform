@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 
 class SessionModel {
   bool isLogin;
   String username;
-  int accountId;
-  int role;
+  int level;
+  bool isBan;
 
-  SessionModel({this.isLogin, this.username, this.accountId, this.role});
+  SessionModel({this.isLogin, this.username, this.isBan, this.level});
 }

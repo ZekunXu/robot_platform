@@ -13,5 +13,9 @@ class MyRoutes {
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       print("Error ==> Route not exist.");
     });
+
+router.define(Routes.login, handler: loginPageHandler);
+router.define(Routes.register, handler: registerPageHandler);
+
   }
 }

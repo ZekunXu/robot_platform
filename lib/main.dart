@@ -1,12 +1,17 @@
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:robot_platform/configs/configure_global_param.dart';
 import 'package:robot_platform/configs/configure_routes.dart';
+import 'package:robot_platform/services/session_service.dart';
 import 'package:robot_platform/widgets/color_theme/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './pages/index.dart';
 import 'main_state.dart';
 import 'package:redux/redux.dart';
 import 'package:fluro/fluro.dart';
 import './routers/application.dart';
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -21,6 +26,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    _checkLogin();
     super.initState();
   }
 
@@ -45,7 +51,7 @@ class _MyAppState extends State<MyApp> {
         builder: (context, store) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: ThemeData.light(),
+            theme: myLightTheme,
             darkTheme: myDarkTheme,
             home: IndexPage(),
             onGenerateRoute: Application.router.generator,
@@ -53,5 +59,26 @@ class _MyAppState extends State<MyApp> {
         },
       ),
     );
+  }
+
+
+  _checkLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(GlobalParam.SHARED_PREFERENCE_TOKEN);
+    if(token != null){
+        getSessionInfoByToken(token: token)
+            .then((value){
+           final data = json.decode(value.data);
+           switch(data["msg"]){
+             case "success":
+               setState(() {
+                 this.isLogin = true;
+               });
+               break;
+             case "no proper user found":
+               Fluttertoast.showToast(msg: "登录失效，请重新登录");
+           }
+        });
+    }
   }
 }

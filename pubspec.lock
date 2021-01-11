@@ -91,7 +91,7 @@ packages:
       name: dartros
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.4+5"
+    version: "0.0.4+7"
   dartx:
     dependency: transitive
     description:
@@ -152,7 +152,7 @@ packages:
       name: flutter_easyrefresh
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.7"
+    version: "2.1.8"
   flutter_ijkplayer:
     dependency: "direct main"
     description:
@@ -180,7 +180,7 @@ packages:
       name: flutter_staggered_grid_view
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.3.2"
+    version: "0.3.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -192,7 +192,7 @@ packages:
       name: flutter_vlc_player
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.2"
+    version: "4.0.3"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -204,14 +204,14 @@ packages:
       name: fluttertoast
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "7.1.5"
+    version: "7.1.6"
   freezed_annotation:
     dependency: transitive
     description:
       name: freezed_annotation
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.11.0+1"
+    version: "0.12.0"
   http:
     dependency: transitive
     description:
@@ -232,7 +232,7 @@ packages:
       name: image_picker
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.6.7+15"
+    version: "0.6.7+20"
   image_picker_platform_interface:
     dependency: transitive
     description:
@@ -388,7 +388,7 @@ packages:
       name: rxdart
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.24.1"
+    version: "0.25.0"
   shared_preferences:
     dependency: "direct main"
     description:

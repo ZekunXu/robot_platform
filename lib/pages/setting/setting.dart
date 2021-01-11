@@ -26,6 +26,7 @@ class _SettingPageState extends State<SettingPage> {
   ];
 
   final List<String> content3 = [
+    "登录",
     "退出登录",
   ];
 

@@ -35,13 +35,12 @@ class _WebCamWidgetState extends State<WebCamWidget> {
       children: [
         Align(
           alignment: Alignment.centerLeft,
-          child: Text("固定摄像头"),
+          child: Text("固定摄像头", style: TextStyle(fontSize: 20),),
         ),
         Padding(padding: EdgeInsets.only(top: 10)),
         GridView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-
           itemCount: webCamUrl.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.78),
             itemBuilder: (context, index){
@@ -56,10 +55,4 @@ class _WebCamWidgetState extends State<WebCamWidget> {
       ],
     );
   }
-
-// _controller({@required String url}) async {
-//     IjkMediaController controller = IjkMediaController();
-//     await controller.setNetworkDataSource(url);
-//     return controller;
-//   }
 }
