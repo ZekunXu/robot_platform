@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:robot_platform/pages/session/login.dart';
 import '../main_state.dart';
 import 'package:robot_platform/pages/home/home.dart';
 import 'package:robot_platform/pages/setting/setting.dart';
@@ -34,7 +35,7 @@ class _IndexPageState extends State<IndexPage> {
   Widget build(BuildContext context) {
     return StoreBuilder<MainState>(
       builder: (context, store) {
-        return Scaffold(
+        return store.state.sessionState.isLogin ? Scaffold(
           bottomNavigationBar: BottomNavigationBar(
             selectedItemColor: Color.fromRGBO(63, 140, 255, 1),
             unselectedItemColor: Color.fromRGBO(125, 126, 131, 1),
@@ -50,7 +51,7 @@ class _IndexPageState extends State<IndexPage> {
             index: this.currentPageIndex,
             children: this.tabBodies,
           ),
-        );
+        ) : LoginPage();
       },
     );
   }

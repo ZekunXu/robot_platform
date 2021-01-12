@@ -2,8 +2,8 @@
 class SessionModel {
   bool isLogin;
   String username;
-  int level;
+  String identity;
   bool isBan;
 
-  SessionModel({this.isLogin, this.username, this.isBan, this.level});
+  SessionModel({this.isLogin, this.username, this.isBan, this.identity});
 }

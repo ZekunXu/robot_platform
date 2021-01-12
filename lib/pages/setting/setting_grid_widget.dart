@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
+import 'package:robot_platform/pages/index.dart';
+import 'package:robot_platform/pages/setting/setting.dart';
 import 'package:robot_platform/redux/actions/session_action.dart';
 import 'package:robot_platform/routers/application.dart';
 import 'package:robot_platform/widgets/common_card.dart';
@@ -33,8 +35,8 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<MainState, _viewModel>(
-      converter: (store) => _viewModel.create(store),
+    return StoreConnector<MainState, _ViewModel>(
+      converter: (store) => _ViewModel.create(store),
       builder: (context, viewModel){
         return MyCard(
             child: ListView.separated(
@@ -57,23 +59,7 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
 
                   return InkWell(
                     borderRadius: borderRadius,
-                    onTap: () {
-                      switch(widget.content[index]){
-                        case "登录":
-                          if(viewModel.isLogin == true){
-                            Fluttertoast.showToast(msg: "已经登录");
-                          }else{
-                            Application.router.navigateTo(context, '/login');
-                          }
-                          break;
-                        case "退出登录":
-                          _logOut(viewModel);
-                          break;
-                        default:
-                          Fluttertoast.showToast(msg: "你点击了 ${widget.content[index]}");
-                          break;
-                      }
-                    },
+                    onTap: () => _settingNavigator(viewModel, index),
                     child: ListTile(
                       title: Text(widget.content[index]),
                     ),
@@ -91,31 +77,59 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
     );
   }
 
-  _logOut(_viewModel viewModel) async {
-    if(viewModel.isLogin == true){
-      final prefs = await SharedPreferences.getInstance();
-      prefs.remove(GlobalParam.SHARED_PREFERENCE_TOKEN);
-      viewModel.onSetLoginStatus(false);
-      Fluttertoast.showToast(msg: "已经退出登录");
-    }else{
-      Fluttertoast.showToast(msg: "还没有登录");
+
+  _settingNavigator(_ViewModel viewModel, int index) {
+    switch (widget.content[index]) {
+      case "退出登录":
+        _logOut(viewModel);
+        break;
+      default:
+        Fluttertoast.showToast(msg: "你点击了 ${widget.content[index]}");
+        break;
     }
+  }
+
+  _logOut(_ViewModel viewModel) async {
+
+    return showDialog(context: context,
+    builder: (context){
+      return AlertDialog(
+        title: Text("确定要退出登录吗？"),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
+        actions: [
+          FlatButton(onPressed: (){
+            Navigator.of(context).pop();
+            },
+              child: Text("取消")),
+          FlatButton(onPressed: () async {
+            final prefs = await SharedPreferences.getInstance();
+            prefs.remove(GlobalParam.SHARED_PREFERENCE_TOKEN);
+            viewModel.onSetLoginStatus(false);
+            Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => IndexPage()),
+                    (route) => route == null);
+            Fluttertoast.showToast(msg: "已经退出登录");
+          }, child: Text("确定", style: TextStyle(color: Color.fromRGBO(197, 198, 199, 1)),)),
+        ],
+
+      );
+    }
+    );
   }
 }
 
-class _viewModel {
+class _ViewModel {
   bool isLogin;
   Function(bool) onSetLoginStatus;
 
-  _viewModel({this.isLogin, this.onSetLoginStatus});
+  _ViewModel({this.isLogin, this.onSetLoginStatus});
 
-  factory _viewModel.create(Store<MainState> store){
+  factory _ViewModel.create(Store<MainState> store){
 
     _onSetLoginStatus(bool isLogin){
-      store.dispatch(setLoginStateAction(isLogin: isLogin));
+      store.dispatch(SetLoginStateAction(isLogin: isLogin));
     }
 
-    return _viewModel(
+    return _ViewModel(
       isLogin: store.state.sessionState.isLogin,
       onSetLoginStatus: _onSetLoginStatus,
     );

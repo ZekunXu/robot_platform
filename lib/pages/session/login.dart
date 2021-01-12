@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
+import 'package:robot_platform/pages/index.dart';
 import 'package:robot_platform/pages/session/session_title_widget.dart';
 import 'package:robot_platform/redux/actions/session_action.dart';
 import 'package:robot_platform/widgets/common_button_with_icon.dart';
@@ -23,7 +24,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   String username;
   String password;
 
@@ -39,11 +39,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: StoreConnector<MainState, _ViewModel>(
         converter: (store) => _ViewModel.create(store),
-        builder: (context, viewModel){
+        builder: (context, viewModel) {
           return SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.fromLTRB(26, 77, 26, 30),
@@ -66,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   MyTextField(
                     hintText: "username",
-                    onChanged: (value){
+                    onChanged: (value) {
                       setState(() {
                         this.username = value;
                       });
@@ -83,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                     child: MyTextField(
                       hintText: "password",
-                      onChanged: (value){
+                      onChanged: (value) {
                         setState(() {
                           this.password = value;
                         });
@@ -101,14 +100,18 @@ class _LoginPageState extends State<LoginPage> {
                     child: FlatButton(
                       child: RichText(
                         text: TextSpan(
-                          text: "没有账号? ",
-                          style: DefaultTextStyle.of(context).style,
-                          children: [
-                            TextSpan(text: "点击注册", style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
-                          ]
-                        ),
+                            text: "没有账号? ",
+                            style: DefaultTextStyle.of(context).style,
+                            children: [
+                              TextSpan(
+                                  text: "点击注册",
+                                  style: TextStyle(
+                                      color: Colors.blueAccent,
+                                      fontWeight: FontWeight.bold)),
+                            ]),
                       ),
-                      onPressed: () => Application.router.navigateTo(context, "/register"),
+                      onPressed: () =>
+                          Application.router.navigateTo(context, "/register"),
                     ),
                   )
                 ],
@@ -120,44 +123,71 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _handleLogin(_ViewModel viewModel){
-    if(this.username == null || this.password == null){
+  _handleLogin(_ViewModel viewModel) {
+    if (this.username == null || this.password == null) {
       return Fluttertoast.showToast(msg: "账号或者密码不能为空");
     }
 
-    final Map loginInfo = {"username": this.username, "password": this.password};
+    final Map loginInfo = {
+      "username": this.username,
+      "password": this.password
+    };
 
-    handleLoginService(loginInfo: loginInfo)
-        .then((value){
-          var data = json.decode(value.data);
-          _saveToken(token: data["param"]["token"]);
-          Fluttertoast.showToast(msg: "登录成功");
-          viewModel.onSetLoginState(true);
-          Navigator.of(context).pop();
+    handleLoginService(loginInfo: loginInfo).then((value) {
+      var data = json.decode(value.data);
+      viewModel.onSetUsername(data["param"]["username"]);
+      _saveIdentity(level: data["param"]["level"], viewModel: viewModel);
+      _saveToken(token: data["param"]["token"]);
+      Fluttertoast.showToast(msg: "登录成功");
+      viewModel.onSetLoginState(true);
+      Navigator.of(context).pushAndRemoveUntil(
+          new MaterialPageRoute(builder: (context) => IndexPage()),
+          (route) => route == null);
     }).catchError((err) => Fluttertoast.showToast(msg: err.toString()));
   }
-
 
   _saveToken({@required String token}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(GlobalParam.SHARED_PREFERENCE_TOKEN, token);
   }
+
+  _saveIdentity({@required int level, @required _ViewModel viewModel}) {
+    switch (level) {
+      case 0:
+        viewModel.onSetUserIdentity("普通用户");
+        break;
+      case 1:
+        viewModel.onSetUserIdentity("管理员");
+        break;
+    }
+  }
 }
 
 class _ViewModel {
   Function(bool) onSetLoginState;
+  Function(String) onSetUsername;
+  Function(String) onSetUserIdentity;
 
-  _ViewModel({this.onSetLoginState});
+  _ViewModel(
+      {this.onSetLoginState, this.onSetUsername, this.onSetUserIdentity});
 
-  factory _ViewModel.create(Store<MainState> store){
-    _onSetLoginState(bool isLogin){
-      store.dispatch(setLoginStateAction(isLogin: isLogin));
+  factory _ViewModel.create(Store<MainState> store) {
+    _onSetLoginState(bool isLogin) {
+      store.dispatch(SetLoginStateAction(isLogin: isLogin));
+    }
+
+    _ontSetUsername(String username) {
+      store.dispatch(SetUsernameAction(username: username));
+    }
+
+    _onSetUserIdentity(String identity) {
+      store.dispatch(SetUserIdentityAction(identity: identity));
     }
 
     return _ViewModel(
       onSetLoginState: _onSetLoginState,
+      onSetUsername: _ontSetUsername,
+      onSetUserIdentity: _onSetUserIdentity,
     );
-
   }
-
 }

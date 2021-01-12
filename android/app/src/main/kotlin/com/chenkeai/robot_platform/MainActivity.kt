@@ -1,4 +1,4 @@
-package com.chenkeai.dalu_robot
+package com.chenkeai.robot_platform
 
 import io.flutter.embedding.android.FlutterActivity
 

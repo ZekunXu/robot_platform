@@ -2,31 +2,45 @@ import 'package:redux/redux.dart';
 import '../models/session_model.dart';
 
 // ignore: camel_case_types
-class setUsernameAction {
+class SetUsernameAction {
   String username;
-  setUsernameAction({this.username}) : super();
+  SetUsernameAction({this.username}) : super();
 
   static SessionModel setUsername(
-      SessionModel session, setUsernameAction action) {
+      SessionModel session, SetUsernameAction action) {
     session?.username = action?.username;
     return session;
   }
 }
 
+class SetUserIdentityAction {
+  String identity;
+
+  SetUserIdentityAction({this.identity}) : super();
+
+  static SessionModel setUserIdentity(
+      SessionModel session, SetUserIdentityAction action){
+    session?.identity = action?.identity;
+    return session;
+  }
+
+}
+
 // ignore: camel_case_types
-class setLoginStateAction {
+class SetLoginStateAction {
   bool isLogin;
-  setLoginStateAction({this.isLogin});
+  SetLoginStateAction({this.isLogin});
 
   static SessionModel setLoginState(
-      SessionModel session, setLoginStateAction action) {
+      SessionModel session, SetLoginStateAction action) {
     session?.isLogin = action?.isLogin;
     return session;
   }
 }
 
 final sessionReducer = combineReducers<SessionModel>([
-  TypedReducer<SessionModel, setUsernameAction>(setUsernameAction.setUsername),
-  TypedReducer<SessionModel, setLoginStateAction>(
-      setLoginStateAction.setLoginState),
+  TypedReducer<SessionModel, SetUsernameAction>(SetUsernameAction.setUsername),
+  TypedReducer<SessionModel, SetLoginStateAction>(
+      SetLoginStateAction.setLoginState),
+  TypedReducer<SessionModel, SetUserIdentityAction>(SetUserIdentityAction.setUserIdentity),
 ]);
