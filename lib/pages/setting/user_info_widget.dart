@@ -42,13 +42,13 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
                 children: [
                   Text(
                     viewModel.username ?? "点击登录",
-                    style: TextStyle(fontSize: 16, color: Colors.black),
+                    style: TextStyle(fontSize: 20, color: Colors.black),
                   ),
                   Padding(padding: EdgeInsets.only(left: 20)),
                   Text(
                     viewModel.identity ?? "",
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 20,
                         color: Color.fromRGBO(63, 140, 255, 1),
                         fontWeight: FontWeight.bold),
                   ),

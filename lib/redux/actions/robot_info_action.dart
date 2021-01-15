@@ -25,7 +25,7 @@ class SetRobotIdAction {
 }
 
 class SetWebCamUrlsAction {
-  Map webCamUrls;
+  List webCamUrls;
 
   SetWebCamUrlsAction({this.webCamUrls});
 
@@ -33,11 +33,22 @@ class SetWebCamUrlsAction {
     model?.param = action?.webCamUrls;
     return model;
   }
+}
 
+class SetWebCamIdAction {
+  String camId;
+
+  SetWebCamIdAction({this.camId});
+
+  static RobotInfoModel setWebCamId(RobotInfoModel model, SetWebCamIdAction action){
+    model?.camId = action?.camId;
+    return model;
+  }
 }
 
 final robotInfoReducer = combineReducers<RobotInfoModel>([
   TypedReducer<RobotInfoModel, SetRobotNameAction>(SetRobotNameAction.setRobotName),
   TypedReducer<RobotInfoModel, SetRobotIdAction>(SetRobotIdAction.setRobotId),
   TypedReducer<RobotInfoModel, SetWebCamUrlsAction>(SetWebCamUrlsAction.setWebCamUrls),
+  TypedReducer<RobotInfoModel, SetWebCamIdAction>(SetWebCamIdAction.setWebCamId),
 ]);

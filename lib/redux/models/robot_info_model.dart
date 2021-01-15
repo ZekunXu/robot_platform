@@ -4,8 +4,15 @@ class RobotInfoModel {
   String batteryPercentage;
   DateTime lastUpdateTime;
   String status;
-  Map param;
+  List param;
+  String camId;
 
-  RobotInfoModel({this.robotId, this.name, this.param, this.batteryPercentage, this.lastUpdateTime, this.status});
-
+  RobotInfoModel(
+      {this.robotId,
+      this.name,
+      this.param,
+      this.batteryPercentage,
+      this.lastUpdateTime,
+      this.status,
+      this.camId});
 }

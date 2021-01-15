@@ -1,10 +1,14 @@
-
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:robot_platform/services/haikang_service.dart';
+
 
 void main() {
-  Map data = {"abc": 123};
-  var newData = json.encode(data);
-  print(newData.runtimeType);
+  List a = ["abc", "def"];
+  String b = "";
+  for(int i=0; i<a.length; i++){
+    b += "${a[i]}:1,";
+  }
+  print(b);
 }

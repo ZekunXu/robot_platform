@@ -43,6 +43,7 @@ ThemeData myLightTheme = ThemeData(
   brightness: Brightness.light,
   scaffoldBackgroundColor: Color.fromRGBO(242, 242, 242, 1),
   cardTheme: CardTheme(
+    shadowColor: Color.fromRGBO(242, 242, 242, 1),
       color: Colors.white,
       elevation: 6.0,
       shape: RoundedRectangleBorder(

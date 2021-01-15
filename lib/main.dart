@@ -23,6 +23,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool isLogin = false;
+  String username = "";
+  String identity = "";
 
   @override
   void initState() {
@@ -73,6 +75,15 @@ class _MyAppState extends State<MyApp> {
              case "success":
                setState(() {
                  this.isLogin = true;
+                 this.username = data["param"]["username"];
+                 switch(data["param"]["level"]){
+                   case 0:
+                     this.identity = "普通用户";
+                     break;
+                   case 1:
+                     this.identity = "管理员";
+                     break;
+                 }
                });
                break;
              case "no proper user found":

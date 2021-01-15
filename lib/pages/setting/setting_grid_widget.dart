@@ -6,10 +6,12 @@ import 'package:robot_platform/pages/index.dart';
 import 'package:robot_platform/pages/setting/setting.dart';
 import 'package:robot_platform/redux/actions/session_action.dart';
 import 'package:robot_platform/routers/application.dart';
+import 'package:robot_platform/services/haikang_service.dart';
 import 'package:robot_platform/widgets/common_card.dart';
 import 'package:redux/redux.dart';
 import 'package:robot_platform/main_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class SettingGridWidget extends StatefulWidget {
   final List<String> content;

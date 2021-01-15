@@ -59,8 +59,7 @@ class _ChangeRobotInfoWidgetState extends State<ChangeRobotInfoWidget> {
                 "name": robot["name"],
                 "hardwareID": robot["hardwareID"],
                 "status": "online",
-                "param": robot["param"],
-                "camType": robot["camType"]
+                "param": robot["param"]
               })
           .toList();
       setState(() {

@@ -135,14 +135,21 @@ class _LoginPageState extends State<LoginPage> {
 
     handleLoginService(loginInfo: loginInfo).then((value) {
       var data = json.decode(value.data);
-      viewModel.onSetUsername(data["param"]["username"]);
-      _saveIdentity(level: data["param"]["level"], viewModel: viewModel);
-      _saveToken(token: data["param"]["token"]);
-      Fluttertoast.showToast(msg: "登录成功");
-      viewModel.onSetLoginState(true);
-      Navigator.of(context).pushAndRemoveUntil(
-          new MaterialPageRoute(builder: (context) => IndexPage()),
-          (route) => route == null);
+      switch(data["msg"]){
+        case "username or password is wrong":
+          Fluttertoast.showToast(msg: "用户名或密码错误");
+          break;
+        case "success":
+          viewModel.onSetUsername(data["param"]["username"]);
+          _saveIdentity(level: data["param"]["level"], viewModel: viewModel);
+          _saveToken(token: data["param"]["token"]);
+          Fluttertoast.showToast(msg: "登录成功");
+          viewModel.onSetLoginState(true);
+          Navigator.of(context).pushAndRemoveUntil(
+              new MaterialPageRoute(builder: (context) => IndexPage()),
+                  (route) => route == null);
+          break;
+      }
     }).catchError((err) => Fluttertoast.showToast(msg: err.toString()));
   }
 

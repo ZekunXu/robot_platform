@@ -92,8 +92,17 @@ class _RobotInfoWidgetState extends State<RobotInfoWidget> {
         widget.controller.reset();
         viewModel.onSetRobotNameState(value["name"]);
         viewModel.onSetRobotIdState(value["hardwareID"]);
-        if(value["param"].containsKey("robotCam")) {
-          viewModel.onSetWebCamUrlsState(value["param"]["robotCam"]);
+        if(value["param"].containsKey("robotCam")){
+          List data = [
+            {"name": "前摄像头","Rtmp": value["param"]["robotCam"]["frontRtmp"]},
+            {"name": "后摄像头","Rtmp": value["param"]["robotCam"]["backRtmp"]},
+            {"name": "左摄像头","Rtmp": value["param"]["robotCam"]["leftRtmp"]},
+            {"name": "左摄像头","Rtmp": value["param"]["robotCam"]["rightRtmp"]},
+          ];
+          viewModel.onSetWebCamUrlsState(data);
+        }else if(value["param"].containsKey("haiKangCam")){
+          List data = [{"name": "摄像头","Rtmp": value["param"]["haiKangCam"]["SDRtmp"]}];
+          viewModel.onSetWebCamUrlsState(data);
         }
       }
     });
@@ -105,7 +114,7 @@ class _ViewModel {
   Function(String) onSetRobotIdState;
   String name;
   String status;
-  Function(Map) onSetWebCamUrlsState;
+  Function(List) onSetWebCamUrlsState;
 
   _ViewModel({this.onSetRobotIdState, this.onSetRobotNameState, this.name, this.onSetWebCamUrlsState, this.status});
 
@@ -118,7 +127,7 @@ class _ViewModel {
       store.dispatch(SetRobotIdAction(robotId: id));
     }
 
-    _onSetWebCamUrlsState(Map param) {
+    _onSetWebCamUrlsState(List param) {
       store.dispatch(SetWebCamUrlsAction(webCamUrls: param));
     }
 

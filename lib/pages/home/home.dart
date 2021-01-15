@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:robot_platform/pages/home/robot_cam_widget.dart';
 import 'package:robot_platform/widgets/common_button_with_icon.dart';
 import 'package:flutter_ijkplayer/flutter_ijkplayer.dart';
 import 'package:robot_platform/services/log_service.dart';
@@ -21,8 +22,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   IjkMediaController controller = IjkMediaController();
-  final double playerWidth = double.maxFinite;
-  final double playerHeight = 200;
   final List<String> alarmMessage1 = [
     "这是第一条报警信息",
     "This is the second alarm message from robot 2",
@@ -69,31 +68,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         RobotInfoWidget(controller: this.controller,),
                         Padding(padding: EdgeInsets.only(top: 20)),
-                        viewModel.params != null ? _WebCamDisplay() : Padding(padding: EdgeInsets.zero,),
-                        viewModel.params != null ? Wrap(
-                          direction: Axis.horizontal,
-                          children: [
-                            MyButtonWithIcon(
-                              text: "前置摄像头",
-                              onPressed: () => _getFrontCameraUrl(url: viewModel.params["frontUrl"]),
-                            ),
-                            MyButtonWithIcon(
-                              text: "后置摄像头",
-                              onPressed: () =>
-                                  _getFrontCameraUrl(url: viewModel.params["backUrl"]),
-                            ),
-                            MyButtonWithIcon(
-                              text: "左摄像头",
-                              onPressed: () =>
-                                  _getFrontCameraUrl(url: viewModel.params["leftUrl"]),
-                            ),
-                            MyButtonWithIcon(
-                              text: "右摄像头",
-                              onPressed: () =>
-                                  _getFrontCameraUrl(url: viewModel.params["rightUrl"]),
-                            ),
-                          ],
-                        ) : Padding(padding: EdgeInsets.zero,),
+                        RobotCamWidget(controller: this.controller,),
                         Padding(padding: EdgeInsets.only(top: 20)),
                         WebCamWidget(),
                         Padding(padding: EdgeInsets.only(top: 20)),
@@ -120,26 +95,6 @@ class _HomePageState extends State<HomePage> {
             }));
   }
 
-  _getFrontCameraUrl({@required String url}) async {
-    print(url);
-    await controller.stop();
-    await controller.setNetworkDataSource(url, autoPlay: true);
-    await controller.play();
-  }
-
-  _WebCamDisplay() {
-    return MyCard(child: SizedBox(
-      height: this.playerHeight,
-      width: this.playerWidth,
-      child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-        child: IjkPlayer(
-          mediaController: controller,
-        ),
-      ),
-    ));
-  }
-
   _getAllMapsInfo() async {
     final String robotId = "19WV430010";
     final String date = "2020-12-11";
@@ -150,14 +105,12 @@ class _HomePageState extends State<HomePage> {
 }
 
 class _ViewModel {
-  Map params;
   String status;
 
-  _ViewModel({this.params, this.status});
+  _ViewModel({this.status});
 
   factory _ViewModel.create(Store<MainState> store) {
     return _ViewModel(
-      params: store.state.robotInfoState.param,
       status: store.state.robotInfoState.status,
     );
   }
