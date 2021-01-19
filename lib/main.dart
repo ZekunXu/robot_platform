@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(GlobalParam.SHARED_PREFERENCE_TOKEN);
     if(token != null){
-        getSessionInfoByToken(token: token)
+        await getSessionInfoByToken(token: token)
             .then((value){
            final data = json.decode(value.data);
            switch(data["msg"]){

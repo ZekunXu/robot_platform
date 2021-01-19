@@ -28,3 +28,11 @@ Future<Response> getAllRobotInfo() async {
 
   return response;
 }
+
+Future<Response> getWebCamInfoByID({@required String id}) async {
+  final url = ApiUrl.stdHttpRequestUrl + "webcams";
+
+  Response response = await (await MyJsonDio.dio).post(url, data: {"id": id});
+
+  return response;
+}

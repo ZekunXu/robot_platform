@@ -2,7 +2,7 @@ class RobotInfoModel {
   String name;
   String robotId;
   String batteryPercentage;
-  DateTime lastUpdateTime;
+  String lastUpdateTime;
   String status;
   List param;
   String camId;

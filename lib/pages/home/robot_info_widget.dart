@@ -1,3 +1,4 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -23,7 +24,6 @@ class RobotInfoWidget extends StatefulWidget {
 }
 
 class _RobotInfoWidgetState extends State<RobotInfoWidget> {
-
   @override
   void initState() {
     super.initState();
@@ -58,14 +58,14 @@ class _RobotInfoWidgetState extends State<RobotInfoWidget> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("电量：30%"),
-                      Text("更新时间: 20:20:20"),
+                      Text(viewModel.percentage != null ? "电量：${viewModel.percentage}" : "电量：0"),
+                      Text(viewModel.updateTime == null ? " " : "最后更新时间：${formatDate(DateTime.fromMillisecondsSinceEpoch(int.parse(viewModel.updateTime)), [HH, ":", nn, ":", ss])}"),
                     ],
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      viewModel.status ?? "不在线",
+                      viewModel.status ?? "不在线", style: TextStyle(color: viewModel.status == "online" ? Colors.blue : Colors.black),
                     ),
                   )
                 ],
@@ -87,21 +87,23 @@ class _RobotInfoWidgetState extends State<RobotInfoWidget> {
         builder: (BuildContext context) {
           return ChangeRobotInfoWidget();
         }).then((value) {
-      if (value != null){
+      if (value != null) {
         widget.controller.stop();
         widget.controller.reset();
         viewModel.onSetRobotNameState(value["name"]);
         viewModel.onSetRobotIdState(value["hardwareID"]);
-        if(value["param"].containsKey("robotCam")){
+        if (value["param"].containsKey("robotCam")) {
           List data = [
-            {"name": "前摄像头","Rtmp": value["param"]["robotCam"]["frontRtmp"]},
-            {"name": "后摄像头","Rtmp": value["param"]["robotCam"]["backRtmp"]},
-            {"name": "左摄像头","Rtmp": value["param"]["robotCam"]["leftRtmp"]},
-            {"name": "左摄像头","Rtmp": value["param"]["robotCam"]["rightRtmp"]},
+            {"name": "前摄像头", "Rtmp": value["param"]["robotCam"]["frontRtmp"]},
+            {"name": "后摄像头", "Rtmp": value["param"]["robotCam"]["backRtmp"]},
+            {"name": "左摄像头", "Rtmp": value["param"]["robotCam"]["leftRtmp"]},
+            {"name": "左摄像头", "Rtmp": value["param"]["robotCam"]["rightRtmp"]},
           ];
           viewModel.onSetWebCamUrlsState(data);
-        }else if(value["param"].containsKey("haiKangCam")){
-          List data = [{"name": "摄像头","Rtmp": value["param"]["haiKangCam"]["SDRtmp"]}];
+        } else if (value["param"].containsKey("haiKangCam")) {
+          List data = [
+            {"name": "摄像头", "Rtmp": value["param"]["haiKangCam"]["SDRtmp"]}
+          ];
           viewModel.onSetWebCamUrlsState(data);
         }
       }
@@ -114,9 +116,18 @@ class _ViewModel {
   Function(String) onSetRobotIdState;
   String name;
   String status;
+  String percentage;
+  String updateTime;
   Function(List) onSetWebCamUrlsState;
 
-  _ViewModel({this.onSetRobotIdState, this.onSetRobotNameState, this.name, this.onSetWebCamUrlsState, this.status});
+  _ViewModel(
+      {this.onSetRobotIdState,
+      this.onSetRobotNameState,
+      this.name,
+      this.onSetWebCamUrlsState,
+      this.status,
+      this.percentage,
+      this.updateTime});
 
   factory _ViewModel.create(Store<MainState> store) {
     _onSetRobotNameState(String name) {
@@ -137,6 +148,8 @@ class _ViewModel {
       name: store.state.robotInfoState.name,
       onSetWebCamUrlsState: _onSetWebCamUrlsState,
       status: store.state.robotInfoState.status,
+      percentage: store.state.robotInfoState.batteryPercentage,
+      updateTime: store.state.robotInfoState.lastUpdateTime,
     );
   }
 }
