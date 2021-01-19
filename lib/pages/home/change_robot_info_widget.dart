@@ -49,22 +49,29 @@ class _ChangeRobotInfoWidgetState extends State<ChangeRobotInfoWidget> {
   }
 
   _loadRobots() {
-    getRobotList().then((value) {
+    getRobotList().then((value) async {
       final data = json.decode(value.data);
       // 这里我们只需要万维机器人的摄像头数据，所以先 .where 过滤
       // 然后将我们需要的数据拿出来并且返回回来
-      var myList = data
+      var myList = await data
           .where((robot) => robot["camType"] == "wwRobot")
-          .map((robot) => {
-                "name": robot["name"],
-                "hardwareID": robot["hardwareID"],
-                "status": "online",
-                "param": robot["param"]
-              })
-          .toList();
-      setState(() {
-        robotList = myList;
-      });
+          .map((robot) async {
+            print(robot["hardwareID"]);
+           return await getRobotInfoById(hardwareID: robot["hardwareID"])
+              .then((value){
+                var data = json.decode(value.data);
+                return {
+                  "name": robot["name"],
+                  "hardwareID": robot["hardwareID"],
+                  "status": data["data"]["status"],
+                  "param": robot["param"]
+                };
+            });
+          }).toList();
+      print(myList);
+          setState(() {
+            robotList = myList;
+          });
     });
   }
 
