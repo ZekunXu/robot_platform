@@ -7,9 +7,9 @@ ThemeData myDarkTheme = ThemeData(
   brightness: Brightness.dark,
   cardTheme: CardTheme(
       color: Color.fromRGBO(53, 56, 60, 1),
-      elevation: 6.0,
+      elevation: 2.0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
       )
   ),
   textTheme: TextTheme(
@@ -45,9 +45,9 @@ ThemeData myLightTheme = ThemeData(
   cardTheme: CardTheme(
     shadowColor: Color.fromRGBO(242, 242, 242, 1),
       color: Colors.white,
-      elevation: 6.0,
+      elevation: 2.0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
       )
   ),
     inputDecorationTheme: InputDecorationTheme(

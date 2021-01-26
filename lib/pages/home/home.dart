@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:robot_platform/pages/home/robot_cam_widget.dart';
+import 'package:robot_platform/services/infrared_service.dart';
 import 'package:robot_platform/widgets/common_button_with_icon.dart';
 import 'package:flutter_ijkplayer/flutter_ijkplayer.dart';
 import 'package:robot_platform/services/log_service.dart';
@@ -20,21 +21,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   IjkMediaController controller = IjkMediaController();
-  final List<String> alarmMessage1 = [
-    "这是第一条报警信息",
-    "This is the second alarm message from robot 2",
-    "Robot3 complete its task",
+
+  List alarmMessage1 = [
+    {"msg": "这是第一条报警信息", "timestamp": "1611126095"},
+    {
+      "msg": "This is the second alarm message from robot 2",
+      "timestamp": "1611126095"
+    },
+    {"msg": "Robot3 complete its task", "timestamp": "1611126095"},
   ];
 
-  final List<String> alarmMessage2 = [
-    "7号门烟感正常",
-  ];
-
-  final List<String> alarmMessage3 = [
-    "检测到黑名单人员侵入！！！",
-    "7号门火警检测异常！！！",
+  List alarmMessage2 = [
+    {"msg": "7号门烟感正常", "timestamp": "1611126095"},
   ];
 
   @override
@@ -66,17 +65,32 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        RobotInfoWidget(controller: this.controller,),
+                        RobotInfoWidget(
+                          controller: this.controller,
+                        ),
                         Padding(padding: EdgeInsets.only(top: 20)),
-                        RobotCamWidget(controller: this.controller,),
+                        RobotCamWidget(
+                          controller: this.controller,
+                        ),
                         Padding(padding: EdgeInsets.only(top: 20)),
                         WebCamWidget(),
                         Padding(padding: EdgeInsets.only(top: 20)),
-                        AlarmWidget(
-                          title: "重要警报",
-                          alarmMessage: alarmMessage3,
-                          messageColor: Colors.red,
-                        ),
+                        FutureBuilder(
+                            future: getLatestInfraredMsg(),
+                            builder: (context, snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.done:
+                                  return AlarmWidget(
+                                    title: "重要警报",
+                                    alarmMessage: snapshot.data["data"],
+                                    messageColor: Colors.red,
+                                  );
+                                  break;
+                                default:
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                              }
+                            }),
                         Padding(padding: EdgeInsets.only(top: 20)),
                         AlarmWidget(
                           title: "环境感知",
@@ -93,14 +107,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             }));
-  }
-
-  _getAllMapsInfo() async {
-    final String robotId = "19WV430010";
-    final String date = "2020-12-11";
-    getHistoryLog(robotId: robotId, date: date).then((value) {
-      print(value.data);
-    });
   }
 }
 

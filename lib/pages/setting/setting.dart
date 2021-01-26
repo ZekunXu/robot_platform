@@ -26,6 +26,7 @@ class _SettingPageState extends State<SettingPage> {
   ];
 
   final List<String> content3 = [
+    "检查更新",
     "退出登录",
   ];
 
@@ -43,9 +44,9 @@ class _SettingPageState extends State<SettingPage> {
           children: [
             UserInfoWidget(),
             SettingGridWidget(content: content1),
-            Padding(padding: EdgeInsets.only(bottom: 20)),
+            Padding(padding: EdgeInsets.only(bottom: 10)),
             SettingGridWidget(content: content2),
-            Padding(padding: EdgeInsets.only(bottom: 20)),
+            Padding(padding: EdgeInsets.only(bottom: 10)),
             SettingGridWidget(content: content3),
           ],
         ),

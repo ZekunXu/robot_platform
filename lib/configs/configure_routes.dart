@@ -16,6 +16,7 @@ class MyRoutes {
 
 router.define(Routes.login, handler: loginPageHandler);
 router.define(Routes.register, handler: registerPageHandler);
+router.define(Routes.test, handler: testPagePageHandler);
 
   }
 }

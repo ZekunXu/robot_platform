@@ -19,9 +19,9 @@ class MainState {
   /*
   构造方法初始化 MainState
    */
-  MainState.initialState(bool isLogin) {
+  MainState.initialState({@required bool isLogin, @required String username, @required String identity}) {
     themeState = ThemeModel(themeData: ThemeData.light());
-    sessionState = SessionModel(isLogin: isLogin);
+    sessionState = SessionModel(isLogin: isLogin, username: username, identity: identity);
     messageState = MessageModel(messageList: [{"testMessage": "testMessage"}]);
     robotInfoState = RobotInfoModel(name: "点击选择机器人");
   }

@@ -1,21 +1,24 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:robot_platform/widgets/common_card.dart';
 
 class AlarmWidget extends StatefulWidget {
-
   final String title;
   final Color messageColor;
-  final List<String> alarmMessage;
+  final List alarmMessage;
 
-  AlarmWidget({Key key, @required this.title, @required this.alarmMessage, this.messageColor}) : super(key: key);
+  AlarmWidget(
+      {Key key,
+      @required this.title,
+      @required this.alarmMessage,
+      this.messageColor})
+      : super(key: key);
 
   @override
   _AlarmWidgetState createState() => _AlarmWidgetState();
 }
 
 class _AlarmWidgetState extends State<AlarmWidget> {
-
-
   @override
   void initState() {
     super.initState();
@@ -32,26 +35,38 @@ class _AlarmWidgetState extends State<AlarmWidget> {
       children: [
         Align(
           alignment: Alignment.centerLeft,
-          child: Text(widget.title, style: TextStyle(fontSize: 20),),
+          child: Text(
+            widget.title,
+            style: TextStyle(fontSize: 20),
+          ),
         ),
         Padding(padding: EdgeInsets.only(top: 10)),
         MyCard(
             child: Container(
-              padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: widget.alarmMessage.length,
-                  itemBuilder: (context, index){
-                  return Container(
-                    margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                    alignment: Alignment.centerLeft,
-                    child: Text(widget.alarmMessage[index], style: TextStyle(color: widget.messageColor ?? null),),
-                  );
-                  }
-              ),
-            )
-        ),
+          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+          child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: widget.alarmMessage.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  alignment: Alignment.centerLeft,
+                  child: ListTile(
+                    onTap: (){},
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      widget.alarmMessage[index]["msg"],
+                      style: TextStyle(color: widget.messageColor ?? null),
+                    ),
+                    subtitle: Text(formatDate(
+                        DateTime.fromMillisecondsSinceEpoch(
+                            int.parse(widget.alarmMessage[index]["timestamp"])),
+                        [HH, ":", nn, ":", ss])),
+                  ),
+                );
+              }),
+        )),
       ],
     );
   }

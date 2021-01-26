@@ -1,17 +1,22 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:install_plugin/install_plugin.dart';
+import 'package:package_info/package_info.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
 import 'package:robot_platform/pages/index.dart';
 import 'package:robot_platform/pages/setting/setting.dart';
 import 'package:robot_platform/redux/actions/session_action.dart';
 import 'package:robot_platform/routers/application.dart';
 import 'package:robot_platform/services/haikang_service.dart';
+import 'package:robot_platform/services/update_service.dart';
 import 'package:robot_platform/widgets/common_card.dart';
 import 'package:redux/redux.dart';
 import 'package:robot_platform/main_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:device_info/device_info.dart';
 
 class SettingGridWidget extends StatefulWidget {
   final List<String> content;
@@ -85,6 +90,12 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
       case "退出登录":
         _logOut(viewModel);
         break;
+      case "检查更新":
+        _checkUpdate();
+        break;
+      // case "推送设置":
+      //   Application.router.navigateTo(context, '/test');
+      //   break;
       default:
         Fluttertoast.showToast(msg: "你点击了 ${widget.content[index]}");
         break;
@@ -116,6 +127,46 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
       );
     }
     );
+  }
+
+  _checkUpdate() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    String build = packageInfo.buildNumber;
+    String packageName = packageInfo.packageName;
+    String platform = Platform.isAndroid ? "android" : "ios";
+    getAppUpdateInfo()
+        .then((value) async {
+      var data = json.decode(value.data);
+      if(version == data["data"]["version"] && build == data["data"]["build"]){
+        throw "newest";
+      }
+      Fluttertoast.showToast(msg: "开始下载...不要重复点击哦");
+      File apkfile = await downloadApp(url: data["data"]["downloadlink"]);
+      String apkFilePath = apkfile.path;
+      if(apkFilePath.isEmpty){
+        throw "download_fail";
+      }
+      InstallPlugin.installApk(apkFilePath, packageName)
+          .then((value){
+        print("install apk $value");
+      })
+          .catchError((err){
+        print("install apk err: $err");
+      });
+    })
+        .catchError((err){
+      switch(err){
+        case "newest":
+          return Fluttertoast.showToast(msg: "当前已经是最新版本");
+          break;
+        case "download_fail":
+          return Fluttertoast.showToast(msg: "下载文件失败");
+        default:
+          return Fluttertoast.showToast(msg: err.toString());
+          break;
+      }
+    });
   }
 }
 

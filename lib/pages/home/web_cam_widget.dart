@@ -17,7 +17,6 @@ class WebCamWidget extends StatefulWidget {
 class _WebCamWidgetState extends State<WebCamWidget> {
   List urlList = [];
   String token;
-  IjkMediaController controller = IjkMediaController();
 
   @override
   void initState() {
@@ -64,8 +63,9 @@ class _WebCamWidgetState extends State<WebCamWidget> {
                       ),
                     );
                   } else {
+                    IjkMediaController controller = IjkMediaController();
                     controller.stop();
-                    controller.setNetworkDataSource(urlList[index]["rtmp"]);
+                    controller.setNetworkDataSource(urlList[index]["flvAddress"]);
                     controller.play();
                     return MyCard(
                         child: ClipRRect(
@@ -105,11 +105,12 @@ class _WebCamWidgetState extends State<WebCamWidget> {
         this.urlList = value.data["data"]
             .map((e) => {
                   "name": e["deviceName"],
-                  "rtmp": e["rtmp"],
+                  "flvAddress": e["flvAddress"],
                   "status": e["status"]
                 })
             .toList();
       });
+      print(this.urlList);
     });
   }
 }

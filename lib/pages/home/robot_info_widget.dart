@@ -58,14 +58,28 @@ class _RobotInfoWidgetState extends State<RobotInfoWidget> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(viewModel.percentage != null ? "电量：${viewModel.percentage}" : "电量：0"),
-                      Text(viewModel.updateTime == null ? " " : "最后更新时间：${formatDate(DateTime.fromMillisecondsSinceEpoch(int.parse(viewModel.updateTime)), [HH, ":", nn, ":", ss])}"),
+                      Text(viewModel.percentage != null
+                          ? "电量：${viewModel.percentage}"
+                          : "电量：0"),
+                      Text(viewModel.updateTime == null
+                          ? " "
+                          : "最后更新时间：${formatDate(DateTime.fromMillisecondsSinceEpoch(int.parse(viewModel.updateTime)), [
+                              HH,
+                              ":",
+                              nn,
+                              ":",
+                              ss
+                            ])}"),
                     ],
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      viewModel.status ?? "不在线", style: TextStyle(color: viewModel.status == "online" ? Colors.blue : Colors.black),
+                      viewModel.status ?? "不在线",
+                      style: TextStyle(
+                          color: viewModel.status == "online"
+                              ? Colors.blue
+                              : Colors.black),
                     ),
                   )
                 ],
