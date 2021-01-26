@@ -70,7 +70,7 @@ class _RobotCamWidgetState extends State<RobotCamWidget> {
       height: this.playerHeight,
       width: this.playerWidth,
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
         child: IjkPlayer(
           mediaController: widget.controller,
         ),

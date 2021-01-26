@@ -5,6 +5,7 @@ import 'package:robot_platform/pages/message/people_avatar_widget.dart';
 import 'package:redux/redux.dart';
 import 'package:robot_platform/main_state.dart';
 import 'package:robot_platform/redux/actions/message_action.dart';
+import 'package:robot_platform/services/img_service.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
@@ -20,68 +21,46 @@ class MessagePage extends StatefulWidget {
 
 class _MessagePageState extends State<MessagePage> {
 
-  List<Color> rowList = [
-    Colors.blue,
-    Colors.black,
-    Colors.amber,
-    Colors.grey,
-    Colors.blueGrey,
-  ];
+  List imgList = [];
 
 
   @override
   void initState() {
+    _loadImgList();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: StoreConnector<MainState, _viewModel>(
-        converter: (store) => _viewModel.create(store),
-        builder: (context, viewModel){
-          return FloatingActionButton(
-              child: Icon(Icons.refresh),
-          onPressed: () => _refreshMessageList(viewModel),
-          );
-        },
-      ),
       body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.fromLTRB(15, 30, 15, 30),
-          children: [
-            PeopleAvatarWidget(peopleList: this.rowList,),
-            Padding(padding: EdgeInsets.only(top: 40)),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text("最新", style: TextStyle(fontSize: 20),),
-            ),
-            Padding(padding: EdgeInsets.only(top: 10),),
-            MessageListWidget(),
-          ],
+        child: RefreshIndicator(
+          onRefresh: _loadImgList,
+          child: ListView(
+            padding: EdgeInsets.fromLTRB(15, 30, 15, 30),
+            children: [
+              Text("最新人脸", style: TextStyle(fontSize: 20),),
+              Padding(padding: EdgeInsets.only(top: 10)),
+              PeopleAvatarWidget(imgList: this.imgList,),
+              Padding(padding: EdgeInsets.only(top: 40)),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text("最新消息", style: TextStyle(fontSize: 20),),
+              ),
+              Padding(padding: EdgeInsets.only(top: 10),),
+              MessageListWidget(),
+            ],
+          ),
         ),
       ),
     );
   }
 
-
-  _refreshMessageList(viewModel) {
-    final String webSocket = "ws://www.anbotcloud.com:8180/anbotwebsocket/1b8f1ebd1c88431a9a1f3b6d23229655/1.0.0";
-
-    WebSocketChannel channel = IOWebSocketChannel.connect(webSocket);
-    Fluttertoast.showToast(msg: "websocket连接");
-
-    channel.stream.listen((event) async {
-      if(event != "ping"){
-        Map<String, dynamic> response = jsonDecode(event);
-        await viewModel.onSetMessageState(response);
-        Fluttertoast.showToast(msg: response.toString());
-      }
-    });
-
-    Future.delayed(Duration(seconds: 5), (){
-      channel.sink.close();
-      Fluttertoast.showToast(msg: "websocket连接关闭");
+  Future<void> _loadImgList() async {
+    await getImgListByType(imgType: "faceImg").then((res){
+      this.setState(() {
+        this.imgList = res;
+      });
     });
   }
 }
