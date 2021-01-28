@@ -31,7 +31,6 @@ void main() {
         vibrationPattern: lowVibrationPattern,
         onlyAlertOnce: true),
   ]);
-
   _requestPermission();
 
   runApp(MyApp());
