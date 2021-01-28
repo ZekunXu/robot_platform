@@ -41,9 +41,9 @@ class _PeopleAvatarWidgetState extends State<PeopleAvatarWidget> {
               width: 100,
               decoration: BoxDecoration(
                   borderRadius:
-                  BorderRadius.all(Radius.circular(15.0))),
+                  BorderRadius.all(Radius.circular(10.0))),
               child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 child: Image.network(
                   widget.imgList[index]["url"],
                   fit: BoxFit.cover,

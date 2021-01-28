@@ -1,0 +1,13 @@
+{
+    "tpns": {
+        "access_id": "1500016981",
+        "access_key": "AAAIIQBDJ2HL"
+    },
+    "com.chenkeai.robot_platform": {
+        "channel": {
+            "enable": true
+        }
+    },
+    "debug": false,
+    "version": "1.2.3.0"
+}

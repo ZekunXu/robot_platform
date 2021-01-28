@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
               return SafeArea(
                 child: SingleChildScrollView(
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
+                    padding: EdgeInsets.fromLTRB(16, 30, 16, 20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

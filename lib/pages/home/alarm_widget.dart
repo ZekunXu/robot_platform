@@ -37,7 +37,7 @@ class _AlarmWidgetState extends State<AlarmWidget> {
           alignment: Alignment.centerLeft,
           child: Text(
             widget.title,
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 18),
           ),
         ),
         Padding(padding: EdgeInsets.only(top: 10)),
@@ -62,7 +62,7 @@ class _AlarmWidgetState extends State<AlarmWidget> {
                     subtitle: Text(formatDate(
                         DateTime.fromMillisecondsSinceEpoch(
                             int.parse(widget.alarmMessage[index]["timestamp"])),
-                        [HH, ":", nn, ":", ss])),
+                        [mm, "月", dd, "日  ", HH, ":", nn, ":", ss])),
                   ),
                 );
               }),

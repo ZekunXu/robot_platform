@@ -37,7 +37,7 @@ class _WebCamWidgetState extends State<WebCamWidget> {
           alignment: Alignment.centerLeft,
           child: Text(
             "固定摄像头",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 18),
           ),
         ),
         Padding(padding: EdgeInsets.only(top: 10)),
@@ -72,6 +72,13 @@ class _WebCamWidgetState extends State<WebCamWidget> {
                       borderRadius: BorderRadius.circular(15.0),
                       child: IjkPlayer(
                         mediaController: controller,
+                        controllerWidgetBuilder: (mediaController){
+                          return DefaultIJKControllerWidget(
+                            verticalGesture: false,
+                              horizontalGesture: false,
+                              controller: controller
+                          );
+                        },
                       ),
                     ));
                   }

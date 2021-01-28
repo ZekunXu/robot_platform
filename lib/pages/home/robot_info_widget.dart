@@ -64,11 +64,7 @@ class _RobotInfoWidgetState extends State<RobotInfoWidget> {
                       Text(viewModel.updateTime == null
                           ? " "
                           : "最后更新时间：${formatDate(DateTime.fromMillisecondsSinceEpoch(int.parse(viewModel.updateTime)), [
-                              HH,
-                              ":",
-                              nn,
-                              ":",
-                              ss
+                              HH, ":", nn, ":", ss
                             ])}"),
                     ],
                   ),

@@ -6,8 +6,6 @@ import 'package:redux/redux.dart';
 import 'package:robot_platform/main_state.dart';
 import 'package:robot_platform/redux/actions/message_action.dart';
 import 'package:robot_platform/services/img_service.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -62,6 +60,7 @@ class _MessagePageState extends State<MessagePage> {
         this.imgList = res;
       });
     });
+    Fluttertoast.showToast(msg: "刷新成功");
   }
 }
 

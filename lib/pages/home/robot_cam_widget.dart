@@ -73,6 +73,13 @@ class _RobotCamWidgetState extends State<RobotCamWidget> {
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         child: IjkPlayer(
           mediaController: widget.controller,
+          controllerWidgetBuilder: (mediaController) {
+            return DefaultIJKControllerWidget(
+              controller: widget.controller,
+              verticalGesture: false,
+              horizontalGesture: false,
+            );
+          },
         ),
       ),
     ));

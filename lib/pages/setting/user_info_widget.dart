@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:robot_platform/main_state.dart';
 import 'package:redux/redux.dart';
+import 'package:robot_platform/widgets/common_card.dart';
 
 class UserInfoWidget extends StatefulWidget {
   UserInfoWidget({Key key}) : super(key: key);
