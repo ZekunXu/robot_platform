@@ -107,7 +107,6 @@ class _WebCamWidgetState extends State<WebCamWidget> {
 
       return getUrlByDeviceId(idList: idList, token: this.token);
     }).then((value) {
-      print(value.data);
       setState(() {
         this.urlList = value.data["data"]
             .map((e) => {

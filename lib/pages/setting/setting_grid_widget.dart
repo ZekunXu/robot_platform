@@ -7,6 +7,7 @@ import 'package:package_info/package_info.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
 import 'package:robot_platform/pages/index.dart';
 import 'package:robot_platform/redux/actions/session_action.dart';
+import 'package:robot_platform/services/session_service.dart';
 import 'package:robot_platform/services/update_service.dart';
 import 'package:robot_platform/widgets/common_card.dart';
 import 'package:redux/redux.dart';
@@ -172,7 +173,7 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
     });
   }
 
-  _notificationTest () {
+  _notificationTest () async {
     var fireDate = DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch + 1000);
     var localNotification = LocalNotification(
       id: 234,
@@ -187,9 +188,6 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
       setState(() {
         debugLable = res;
       });
-    });
-    jpush.getRegistrationID().then((value){
-      print(value);
     });
   }
 }

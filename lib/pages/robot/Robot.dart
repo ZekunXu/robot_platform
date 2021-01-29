@@ -43,7 +43,7 @@ class _RobotPageState extends State<RobotPage> {
             padding: EdgeInsets.fromLTRB(15, 30, 15, 30),
             child: this.robotInfo.length > 0 ? StaggeredGridView.countBuilder(
               crossAxisCount: 2,
-              itemCount: robotInfo.length,
+              itemCount: this.robotInfo.length,
               itemBuilder: (context, index) {
 
                 String myrealtimeStatus = _getRobtoStatus(realtimeStatus: robotInfo[index]["realtimeStatus"]);

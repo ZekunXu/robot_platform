@@ -62,8 +62,11 @@ Future<Map> checkLogin() async {
   }
 }
 
-Future<void> sendJgRegisterID({@required String id, @required String token}) async {
-  String url = ApiUrl.stdHttpRequestUrl + "api/robot/sessions/update/jgRegisterId";
+Future<Response> sendJgRegisterID({@required String id, @required String token}) async {
+
+  String url = ApiUrl.stdHttpRequestUrl + "sessions/update/jgRegisterId";
 
   Response response = await (await MyJsonDio.dio).post(url, data: {"token": token, "jgRegisterId": id});
+
+  return response;
 }

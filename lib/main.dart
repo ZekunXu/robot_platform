@@ -161,11 +161,15 @@ class _MyAppState extends State<MyApp> {
     jpush.applyPushAuthority(
         new NotificationSettingsIOS(sound: true, alert: true, badge: true));
 
-    // Platform messages may fail, so we use a try/catch PlatformException.
+    // update registerID every time when app init. We need to get token first.
     final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(GlobalParam.SHARED_PREFERENCE_TOKEN);
+    String token = prefs.getString(GlobalParam.SHARED_PREFERENCE_TOKEN);
     if(token != null) {
-      jpush.getRegistrationID().then((value) => sendJgRegisterID(id: value, token: token));
+      jpush.getRegistrationID().then((value){
+        return sendJgRegisterID(id: value, token: token);
+      }).then((value){
+        Fluttertoast.showToast(msg: "推送连接成功");
+      }).catchError((err) => throw err);
     }
 
     // If the widget was removed from the tree while the asynchronous platform
