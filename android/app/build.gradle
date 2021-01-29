@@ -46,6 +46,11 @@ android {
         ndk {
             abiFilters 'arm64-v8a'
         }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: "com.chenkeai.robot_platform",
+                JPUSH_APPKEY: "bd54c9f26c93aac42d8c4d51",
+                JPUSH_CHANNEL: "developer-default",
+        ]
     }
 
     buildTypes {
@@ -63,4 +68,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    compile 'cn.jiguang.sdk:jpush:3.8.6'  // 此处以JPush 3.8.6 版本为例。
+    compile 'cn.jiguang.sdk:jcore:2.6.0'  // 此处以JCore 2.6.0 版本为例。
 }

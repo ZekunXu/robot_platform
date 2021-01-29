@@ -6,17 +6,15 @@ import 'package:install_plugin/install_plugin.dart';
 import 'package:package_info/package_info.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
 import 'package:robot_platform/pages/index.dart';
-import 'package:robot_platform/pages/setting/setting.dart';
 import 'package:robot_platform/redux/actions/session_action.dart';
-import 'package:robot_platform/routers/application.dart';
-import 'package:robot_platform/services/haikang_service.dart';
 import 'package:robot_platform/services/update_service.dart';
 import 'package:robot_platform/widgets/common_card.dart';
 import 'package:redux/redux.dart';
 import 'package:robot_platform/main_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'package:device_info/device_info.dart';
+import 'package:flutter/services.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 
 class SettingGridWidget extends StatefulWidget {
   final List<String> content;
@@ -30,6 +28,10 @@ class SettingGridWidget extends StatefulWidget {
 }
 
 class _SettingGridWidgetState extends State<SettingGridWidget> {
+
+  String debugLable = 'Unknown';
+  final JPush jpush = new JPush();
+
   @override
   void initState() {
     super.initState();
@@ -93,9 +95,10 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
       case "检查更新":
         _checkUpdate();
         break;
-      // case "推送设置":
-      //   Application.router.navigateTo(context, '/test');
-      //   break;
+      case "推送设置":
+        // Application.router.navigateTo(context, '/test');
+        _notificationTest();
+        break;
       default:
         Fluttertoast.showToast(msg: "你点击了 ${widget.content[index]}");
         break;
@@ -166,6 +169,27 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
           return Fluttertoast.showToast(msg: err.toString());
           break;
       }
+    });
+  }
+
+  _notificationTest () {
+    var fireDate = DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch + 1000);
+    var localNotification = LocalNotification(
+      id: 234,
+      title: '我是推送测试标题wwwwwwwww',
+      buildId: 1,
+      content: '看到了说明已经成功了hahahaha',
+      fireTime: fireDate,
+      subtitle: '一个测试qqqqqqqq',
+    );
+    jpush.sendLocalNotification(localNotification).then((res) {
+      print('sddd');
+      setState(() {
+        debugLable = res;
+      });
+    });
+    jpush.getRegistrationID().then((value){
+      print(value);
     });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
 import 'package:robot_platform/configs/configure_routes.dart';
@@ -13,6 +14,7 @@ import 'package:fluro/fluro.dart';
 import './routers/application.dart';
 import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 
 void main() {
   AwesomeNotifications().initialize(null, [
@@ -41,6 +43,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // 极光推送相关变量
+  String debugLable = 'Unknown';
+  final JPush jpush = new JPush();
+
   bool isLogin = false;
   String username = "";
   String identity = "";
@@ -48,6 +54,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     _checkLogin();
+    _initPlatformState();
     super.initState();
   }
 
@@ -111,6 +118,64 @@ class _MyAppState extends State<MyApp> {
         }
       });
     }
+  }
+
+  // 初始化极光推送
+  Future<void> _initPlatformState() async {
+    String platformVersion;
+
+    try {
+      jpush.addEventHandler(
+          onReceiveNotification: (Map<String, dynamic> message) async {
+            print("flutter onReceiveNotification: $message");
+            setState(() {
+              debugLable = "flutter onReceiveNotification: $message";
+            });
+          }, onOpenNotification: (Map<String, dynamic> message) async {
+        print("flutter onOpenNotification: $message");
+        setState(() {
+          debugLable = "flutter onOpenNotification: $message";
+        });
+      }, onReceiveMessage: (Map<String, dynamic> message) async {
+        print("flutter onReceiveMessage: $message");
+        setState(() {
+          debugLable = "flutter onReceiveMessage: $message";
+        });
+      }, onReceiveNotificationAuthorization:
+          (Map<String, dynamic> message) async {
+        print("flutter onReceiveNotificationAuthorization: $message");
+        setState(() {
+          debugLable = "flutter onReceiveNotificationAuthorization: $message";
+        });
+      });
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    jpush.setup(
+      appKey: "bd54c9f26c93aac42d8c4d51", //你自己应用的 AppKey
+      channel: "theChannel",
+      production: false,
+      debug: true,
+    );
+    jpush.applyPushAuthority(
+        new NotificationSettingsIOS(sound: true, alert: true, badge: true));
+
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(GlobalParam.SHARED_PREFERENCE_TOKEN);
+    if(token != null) {
+      jpush.getRegistrationID().then((value) => sendJgRegisterID(id: value, token: token));
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      debugLable = platformVersion;
+    });
   }
 }
 

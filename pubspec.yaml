@@ -46,6 +46,7 @@ dependencies:
   device_info: ^1.0.0
   install_plugin: ^2.0.1
   awesome_notifications: ^0.0.5+4
+  jpush_flutter: ^0.6.3
   ros_nodes:
     git:
       url: git://github.com/ZekunXu/ros_nodes.git
