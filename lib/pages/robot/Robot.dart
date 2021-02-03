@@ -152,6 +152,5 @@ class _RobotPageState extends State<RobotPage> {
         }).toList();
       });
     });
-    Fluttertoast.showToast(msg: "刷新成功");
   }
 }

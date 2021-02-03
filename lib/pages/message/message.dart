@@ -60,7 +60,6 @@ class _MessagePageState extends State<MessagePage> {
         this.imgList = res;
       });
     });
-    Fluttertoast.showToast(msg: "刷新成功");
   }
 }
 

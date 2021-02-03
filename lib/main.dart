@@ -15,6 +15,7 @@ import './routers/application.dart';
 import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   AwesomeNotifications().initialize(null, [
@@ -33,7 +34,6 @@ void main() {
         vibrationPattern: lowVibrationPattern,
         onlyAlertOnce: true),
   ]);
-  _requestPermission();
 
   runApp(MyApp());
 }
@@ -55,6 +55,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     _checkLogin();
     _initPlatformState();
+    _requestPermission();
     super.initState();
   }
 
@@ -155,21 +156,33 @@ class _MyAppState extends State<MyApp> {
     jpush.setup(
       appKey: "bd54c9f26c93aac42d8c4d51", //你自己应用的 AppKey
       channel: "theChannel",
-      production: false,
-      debug: true,
+      production: true,
+      debug: false,
     );
     jpush.applyPushAuthority(
         new NotificationSettingsIOS(sound: true, alert: true, badge: true));
 
-    // update registerID every time when app init. We need to get token first.
+    // send registerID every time when app init. We need to get token first.
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(GlobalParam.SHARED_PREFERENCE_TOKEN);
-    if(token != null) {
-      jpush.getRegistrationID().then((value){
+    if (token != null) {
+      jpush.getRegistrationID().then((value) {
+        if (value == null) {
+          throw 101;
+        }
         return sendJgRegisterID(id: value, token: token);
-      }).then((value){
+      }).then((value) {
         Fluttertoast.showToast(msg: "推送连接成功");
-      }).catchError((err) => throw err);
+      }).catchError((err) {
+        switch (err) {
+          case 101:
+            Fluttertoast.showToast(msg: "registerID 获取为空");
+            break;
+          default:
+            Fluttertoast.showToast(msg: "registerID获取错误: $err");
+            break;
+        }
+      });
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -181,12 +194,15 @@ class _MyAppState extends State<MyApp> {
       debugLable = platformVersion;
     });
   }
-}
 
-_requestPermission() {
-  AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-    if (!isAllowed) {
-      AwesomeNotifications().requestPermissionToSendNotifications();
-    }
-  });
+  _requestPermission() async {
+
+    Map<Permission, PermissionStatus> statues = await [
+      Permission.location,
+      Permission.storage,
+      Permission.notification,
+      Permission.phone,
+      Permission.camera,
+    ].request();
+  }
 }
