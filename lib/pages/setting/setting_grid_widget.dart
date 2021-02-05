@@ -29,7 +29,6 @@ class SettingGridWidget extends StatefulWidget {
 }
 
 class _SettingGridWidgetState extends State<SettingGridWidget> {
-
   String debugLable = 'Unknown';
   final JPush jpush = new JPush();
 
@@ -47,13 +46,13 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
   Widget build(BuildContext context) {
     return StoreConnector<MainState, _ViewModel>(
       converter: (store) => _ViewModel.create(store),
-      builder: (context, viewModel){
+      builder: (context, viewModel) {
         return MyCard(
             child: ListView.separated(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  Radius radius = Radius.circular(15.0);
+                  Radius radius = Radius.circular(10.0);
                   BorderRadius borderRadius = BorderRadius.zero;
 
                   if (index == 0 && widget.content.length != 1) {
@@ -61,8 +60,8 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
                         BorderRadius.only(topLeft: radius, topRight: radius);
                   } else if (index == widget.content.length - 1 &&
                       widget.content.length != 1) {
-                    borderRadius =
-                        BorderRadius.only(bottomLeft: radius, bottomRight: radius);
+                    borderRadius = BorderRadius.only(
+                        bottomLeft: radius, bottomRight: radius);
                   } else if (widget.content.length == 1) {
                     borderRadius = BorderRadius.all(radius);
                   }
@@ -87,7 +86,6 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
     );
   }
 
-
   _settingNavigator(_ViewModel viewModel, int index) {
     switch (widget.content[index]) {
       case "退出登录":
@@ -107,30 +105,37 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
   }
 
   _logOut(_ViewModel viewModel) async {
-
-    return showDialog(context: context,
-    builder: (context){
-      return AlertDialog(
-        title: Text("确定要退出登录吗？"),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
-        actions: [
-          FlatButton(onPressed: (){
-            Navigator.of(context).pop();
-            },
-              child: Text("取消")),
-          FlatButton(onPressed: () async {
-            final prefs = await SharedPreferences.getInstance();
-            prefs.remove(GlobalParam.SHARED_PREFERENCE_TOKEN);
-            viewModel.onSetLoginStatus(false);
-            Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => IndexPage()),
-                    (route) => route == null);
-            Fluttertoast.showToast(msg: "已经退出登录");
-          }, child: Text("确定", style: TextStyle(color: Color.fromRGBO(197, 198, 199, 1)),)),
-        ],
-
-      );
-    }
-    );
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("确定要退出登录吗？"),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            actions: [
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("取消")),
+              FlatButton(
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    prefs.remove(GlobalParam.SHARED_PREFERENCE_TOKEN);
+                    viewModel.onSetLoginStatus(false);
+                    Navigator.of(context).pushAndRemoveUntil(
+                        new MaterialPageRoute(
+                            builder: (context) => IndexPage()),
+                        (route) => route == null);
+                    Fluttertoast.showToast(msg: "已经退出登录");
+                  },
+                  child: Text(
+                    "确定",
+                    style: TextStyle(color: Color.fromRGBO(197, 198, 199, 1)),
+                  )),
+            ],
+          );
+        });
   }
 
   _checkUpdate() async {
@@ -139,28 +144,52 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
     String build = packageInfo.buildNumber;
     String packageName = packageInfo.packageName;
     String platform = Platform.isAndroid ? "android" : "ios";
-    getAppUpdateInfo()
-        .then((value) async {
+    getAppUpdateInfo().then((value) async {
       var data = json.decode(value.data);
-      if(version == data["data"]["version"] && build == data["data"]["build"]){
+      if (version == data["data"]["version"] &&
+          build == data["data"]["build"]) {
         throw "newest";
       }
-      Fluttertoast.showToast(msg: "开始下载...不要重复点击哦");
-      File apkfile = await downloadApp(url: data["data"]["downloadlink"]);
-      String apkFilePath = apkfile.path;
-      if(apkFilePath.isEmpty){
-        throw "download_fail";
-      }
-      InstallPlugin.installApk(apkFilePath, packageName)
-          .then((value){
-        print("install apk $value");
-      })
-          .catchError((err){
-        print("install apk err: $err");
-      });
-    })
-        .catchError((err){
-      switch(err){
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              title: Text("发现新版本！"),
+              content: Text(data["data"]["updateInfo"] ?? "暂无版本更新信息"),
+              actions: [
+                FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(
+                      "稍后再说",
+                      style: TextStyle(color: Color.fromRGBO(197, 198, 199, 1)),
+                    )),
+                FlatButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                      Fluttertoast.showToast(msg: "开始下载...不要重复点击哦");
+                      File apkFile =
+                          await downloadApp(url: data["data"]["downloadlink"]);
+                      String apkFilePath = apkFile.path;
+                      if (apkFilePath.isEmpty) {
+                        throw "download_fail";
+                      }
+                      InstallPlugin.installApk(apkFilePath, packageName)
+                          .then((value) {
+                        print("install apk $value");
+                      }).catchError((err) {
+                        print("install apk err: $err");
+                      });
+                    },
+                    child: Text(
+                      "现在更新",
+                    )),
+              ],
+            );
+          });
+    }).catchError((err) {
+      switch (err) {
         case "newest":
           return Fluttertoast.showToast(msg: "当前已经是最新版本");
           break;
@@ -173,8 +202,9 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
     });
   }
 
-  _notificationTest () async {
-    var fireDate = DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch + 1000);
+  _notificationTest() async {
+    var fireDate = DateTime.fromMillisecondsSinceEpoch(
+        DateTime.now().millisecondsSinceEpoch + 1000);
     var localNotification = LocalNotification(
       id: 234,
       title: '我是推送测试标题wwwwwwwww',
@@ -198,9 +228,8 @@ class _ViewModel {
 
   _ViewModel({this.isLogin, this.onSetLoginStatus});
 
-  factory _ViewModel.create(Store<MainState> store){
-
-    _onSetLoginStatus(bool isLogin){
+  factory _ViewModel.create(Store<MainState> store) {
+    _onSetLoginStatus(bool isLogin) {
       store.dispatch(SetLoginStateAction(isLogin: isLogin));
     }
 
