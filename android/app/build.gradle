@@ -20,7 +20,6 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -50,6 +49,8 @@ android {
                 JPUSH_PKGNAME: "com.chenkeai.robot_platform",
                 JPUSH_APPKEY: "bd54c9f26c93aac42d8c4d51",
                 JPUSH_CHANNEL: "developer-default",
+                XIAOMI_APPKEY : "5471901738172", // 小米平台注册的appkey
+                XIAOMI_APPID : "2882303761519017172", // 小米平台注册的appid
         ]
     }
 
@@ -68,6 +69,12 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compile 'cn.jiguang.sdk:jpush:3.8.6'  // 此处以JPush 3.8.6 版本为例。
-    compile 'cn.jiguang.sdk:jcore:2.6.0'  // 此处以JCore 2.6.0 版本为例。
+    implementation 'cn.jiguang.sdk.plugin:fcm:3.9.1'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'cn.jiguang.sdk:jpush:3.9.1'  // 此处以JPush 3.8.6 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:2.6.0'  // 此处以JCore 2.6.0 版本为例。
+    implementation 'cn.jiguang.sdk.plugin:xiaomi:3.9.1'
 }
+
+apply plugin: 'com.google.gms.google-services'

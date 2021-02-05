@@ -48,8 +48,6 @@ class _MyAppState extends State<MyApp> {
   final JPush jpush = new JPush();
 
   bool isLogin = false;
-  String username = "";
-  String identity = "";
 
   @override
   void initState() {
@@ -66,9 +64,7 @@ class _MyAppState extends State<MyApp> {
    */
     final store = Store<MainState>(mainReducer,
         initialState: MainState.initialState(
-            isLogin: this.isLogin,
-            username: this.username,
-            identity: this.identity));
+            isLogin: this.isLogin,));
 
     /*
   初始化路由配置
@@ -97,26 +93,8 @@ class _MyAppState extends State<MyApp> {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(GlobalParam.SHARED_PREFERENCE_TOKEN);
     if (token != null) {
-      await getSessionInfoByToken(token: token).then((value) {
-        final data = json.decode(value.data);
-        switch (data["msg"]) {
-          case "success":
-            setState(() {
-              this.isLogin = true;
-              this.username = data["param"]["username"];
-              switch (data["param"]["level"]) {
-                case 0:
-                  this.identity = "普通用户";
-                  break;
-                case 1:
-                  this.identity = "管理员";
-                  break;
-              }
-            });
-            break;
-          case "no proper user found":
-            Fluttertoast.showToast(msg: "登录失效，请重新登录");
-        }
+      setState(() {
+        this.isLogin = true;
       });
     }
   }
