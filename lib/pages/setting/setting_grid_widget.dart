@@ -7,6 +7,7 @@ import 'package:package_info/package_info.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
 import 'package:robot_platform/pages/index.dart';
 import 'package:robot_platform/redux/actions/session_action.dart';
+import 'package:robot_platform/routers/application.dart';
 import 'package:robot_platform/services/session_service.dart';
 import 'package:robot_platform/services/update_service.dart';
 import 'package:robot_platform/widgets/common_card.dart';
@@ -95,8 +96,7 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
         _checkUpdate();
         break;
       case "推送设置":
-        // Application.router.navigateTo(context, '/test');
-        _notificationTest();
+        Application.router.navigateTo(context, '/test');
         break;
       default:
         Fluttertoast.showToast(msg: "你点击了 ${widget.content[index]}");
