@@ -20,7 +20,7 @@ class _RobotPageState extends State<RobotPage> {
     {"text": "IFS四楼大白", "height": 220.0},
   ];
 
-  List<dynamic> robotInfo;
+  List<dynamic> robotInfo = [];
 
   @override
   void initState() {

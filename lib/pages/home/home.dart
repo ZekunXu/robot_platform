@@ -73,8 +73,8 @@ class _HomePageState extends State<HomePage> {
                           controller: this.controller,
                         ),
                         Padding(padding: EdgeInsets.only(top: 20)),
-                        WebCamWidget(),
-                        Padding(padding: EdgeInsets.only(top: 20)),
+                        // WebCamWidget(),
+                        // Padding(padding: EdgeInsets.only(top: 20)),
                         FutureBuilder(
                             future: getLatestInfraredMsg(),
                             builder: (context, snapshot) {
