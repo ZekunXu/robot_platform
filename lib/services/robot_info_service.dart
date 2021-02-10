@@ -57,14 +57,14 @@ Future<List> getRobotInfoToList() async {
 
       if (data["param"].containsKey("robotCam")) {
         urlList = [
-          {"name": "前摄像头", "Rtmp": data["param"]["robotCam"]["frontUrl"]},
-          {"name": "后摄像头", "Rtmp": data["param"]["robotCam"]["backUrl"]},
-          {"name": "左摄像头", "Rtmp": data["param"]["robotCam"]["leftUrl"]},
-          {"name": "右摄像头", "Rtmp": data["param"]["robotCam"]["rightUrl"]},
+          {"name": "前摄像头", "url": data["param"]["robotCam"]["frontUrl"]},
+          {"name": "后摄像头", "url": data["param"]["robotCam"]["backUrl"]},
+          {"name": "左摄像头", "url": data["param"]["robotCam"]["leftUrl"]},
+          {"name": "右摄像头", "url": data["param"]["robotCam"]["rightUrl"]},
         ];
       } else if (data["param"].containsKey("haiKangCam")) {
         urlList = [
-          {"name": "摄像头", "Rtmp": data["param"]["haiKangCam"]["SDFlv"]}
+          {"name": "摄像头", "url": data["param"]["haiKangCam"]["SDFlv"]}
         ];
       }
 
