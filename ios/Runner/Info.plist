@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>运维平台</string>
+	<string>哪吒运维平台</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -24,6 +24,36 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>是否许允此App访问媒体文件？</string>
+	<key>NSCameraUsageDescription</key>
+	<string>是否许允此App使用相机？</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Always and when in use!</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Can I have location always?</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Older devices need location.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Need location when in use</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>是否许允此App使用使用麦克风？</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>是否允许此App使用日历？</string>
+	<key>NSContactsUsageDescription</key>
+	<string>是否允许此App访问通讯录？</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>是否允许此App 访问相册？</string>
+	<key>NSMotionUsageDescription</key>
+	<string>是否允许此App使用传感器数据？</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>是否允许此App使用语音识别？</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -42,57 +72,14 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-
-	<!-- Permission options for the `location` group -->
-        <key>NSLocationWhenInUseUsageDescription</key>
-        <string>Need location when in use</string>
-        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-        <string>Always and when in use!</string>
-        <key>NSLocationUsageDescription</key>
-        <string>Older devices need location.</string>
-        <key>NSLocationAlwaysUsageDescription</key>
-        <string>Can I have location always?</string>
-
-        <!-- Permission options for the `mediaLibrary` group -->
-        <key>NSAppleMusicUsageDescription</key>
-        <string>Music!</string>
-        <key>kTCCServiceMediaLibrary</key>
-        <string>media</string>
-
-        <!-- Permission options for the `calendar` group -->
-        <key>NSCalendarsUsageDescription</key>
-        <string>Calendars</string>
-
-        <!-- Permission options for the `camera` group -->
-        <key>NSCameraUsageDescription</key>
-        <string>camera</string>
-
-        <!-- Permission options for the `contacts` group -->
-        <key>NSContactsUsageDescription</key>
-        <string>contacts</string>
-
-        <!-- Permission options for the `microphone` group -->
-        <key>NSMicrophoneUsageDescription</key>
-        <string>microphone</string>
-
-        <!-- Permission options for the `speech` group -->
-        <key>NSSpeechRecognitionUsageDescription</key>
-        <string>speech</string>
-
-        <!-- Permission options for the `sensors` group -->
-        <key>NSMotionUsageDescription</key>
-        <string>motion</string>
-
-        <!-- Permission options for the `photos` group -->
-        <key>NSPhotoLibraryUsageDescription</key>
-        <string>photos</string>
-
-        <!-- Permission options for the `reminder` group -->
-        <key>NSRemindersUsageDescription</key>
-        <string>reminders</string>
-
-        <key>UIViewControllerBasedStatusBarAppearance</key>
-        <true/>
+	<true/>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>media</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.chenkeai.robot-platform</string>
+	</array>
+	<key>MinimumOSVersion</key>
+	<string>10.0</string>
 </dict>
 </plist>

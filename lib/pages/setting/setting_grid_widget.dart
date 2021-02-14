@@ -87,12 +87,17 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
     );
   }
 
-  _settingNavigator(_ViewModel viewModel, int index) {
+  _settingNavigator(_ViewModel viewModel, int index) async {
     switch (widget.content[index]) {
       case "退出登录":
         _logOut(viewModel);
         break;
       case "检查更新":
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        String platform = Platform.isAndroid ? "android" : "ios";
+        if(platform ==  "ios"){
+          return Fluttertoast.showToast(msg: "ios 版本无法更新哦");
+        }
         _checkUpdate();
         break;
       case "推送设置":

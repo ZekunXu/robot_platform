@@ -1,0 +1,5 @@
+version: "Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)"
+options: "426cd32317a57a0442f9f5ef42e0ee77"
+build_time: [1613182367, 624182000]
+inputs:
+  "/Users/chen/development/program/robot_platform/ios/AwesomeServiceExtension/NotificationService.swift": [1613109409, 861637531]

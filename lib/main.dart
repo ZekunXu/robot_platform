@@ -12,29 +12,10 @@ import 'main_state.dart';
 import 'package:redux/redux.dart';
 import 'package:fluro/fluro.dart';
 import './routers/application.dart';
-import 'dart:convert';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() {
-  AwesomeNotifications().initialize(null, [
-    NotificationChannel(
-        channelKey: 'basic_channel',
-        channelName: 'Basic notifications',
-        channelDescription: 'Notification channel for basic tests',
-        defaultColor: Color(0xFF9D50DD),
-        ledColor: Colors.white),
-    NotificationChannel(
-        channelKey: 'progress_bar',
-        channelName: 'Progress bar notifications',
-        channelDescription: 'Notifications with a progress bar layout',
-        defaultColor: Colors.deepPurple,
-        ledColor: Colors.deepPurple,
-        vibrationPattern: lowVibrationPattern,
-        onlyAlertOnce: true),
-  ]);
-
   runApp(MyApp());
 }
 

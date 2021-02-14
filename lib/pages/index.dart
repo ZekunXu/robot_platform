@@ -7,7 +7,6 @@ import 'package:robot_platform/pages/setting/setting.dart';
 import 'package:robot_platform/pages/message/message.dart';
 import 'package:robot_platform/pages/robot/Robot.dart';
 import 'package:robot_platform/pages/connect/connect.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 
 class IndexPage extends StatefulWidget {
   _IndexPageState createState() => _IndexPageState();

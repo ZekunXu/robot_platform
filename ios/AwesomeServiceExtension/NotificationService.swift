@@ -5,6 +5,17 @@
 //  Created by 陈可爱 on 2021/2/6.
 //
 
+//import awesome_notifications
+//
+//@available(iOS 10.0, *)
+//class NotificationService: AwesomeServiceExtension {
+//
+//}
+
+
+
+
+
 import UserNotifications
 
 class NotificationService: UNNotificationServiceExtension {
@@ -15,15 +26,15 @@ class NotificationService: UNNotificationServiceExtension {
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         self.contentHandler = contentHandler
         bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
-        
+
         if let bestAttemptContent = bestAttemptContent {
             // Modify the notification content here...
             bestAttemptContent.title = "\(bestAttemptContent.title) [modified]"
-            
+
             contentHandler(bestAttemptContent)
         }
     }
-    
+
     override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.

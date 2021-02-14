@@ -1,0 +1,5 @@
+version: "Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)"
+options: "10e0b7926776618269a2c7d96356abdf"
+build_time: [1613182367, 624182000]
+inputs:
+  "/Users/chen/development/program/robot_platform/ios/AwesomeContentExtension/NotificationViewController.swift": [1612602111, 579125545]
