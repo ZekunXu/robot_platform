@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class SettingGridWidget extends StatefulWidget {
   final List<String> content;
@@ -102,6 +103,13 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
         Application.router.navigateTo(context, '/test');
         break;
       default:
+        // return Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("你点击了${widget.content[index]}")));
+        return Flushbar(
+          title: "你点击了${widget.content[index]}",
+          message: "功能正在开发中，敬请期待",
+          duration: Duration(seconds: 2),
+          flushbarPosition: FlushbarPosition.TOP,
+        )..show(context);
         break;
     }
   }

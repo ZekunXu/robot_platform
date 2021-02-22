@@ -45,6 +45,7 @@ dependencies:
   jpush_flutter: ^0.6.3
   permission_handler: ^5.0.1+1
   extended_tabs: ^1.0.1
+  another_flushbar: ^1.10.10
   ros_nodes:
     git:
       url: git://github.com/ZekunXu/ros_nodes.git

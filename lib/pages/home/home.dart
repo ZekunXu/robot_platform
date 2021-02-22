@@ -204,7 +204,7 @@ class _RobotInfoCardState extends State<RobotInfoCard> {
                     backgroundColor: Colors.blue,
                   ),
                   Padding(padding: EdgeInsets.only(left: 10)),
-                  Text(_realtimeStatus, style: TextStyle(fontSize: 16),),
+                  Text(widget.robotInfo["status"] == "online" ? _realtimeStatus : "离线", style: TextStyle(fontSize: 16),),
                 ],
               ),
               Padding(padding: EdgeInsets.only(top: 20)),
