@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:robot_platform/configs/configure_dio.dart';
 import 'package:robot_platform/configs/configure_url.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
@@ -36,7 +35,6 @@ Future<File> downloadApp({@required String url}) async {
 
     return file;
   } catch (e) {
-    Fluttertoast.showToast(msg: e.toString());
     print(e);
   }
 }

@@ -7,7 +7,6 @@ import 'package:robot_platform/main_state.dart';
 import 'package:robot_platform/redux/actions/message_action.dart';
 import 'package:robot_platform/services/img_service.dart';
 import 'dart:convert';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class MessagePage extends StatefulWidget {
 

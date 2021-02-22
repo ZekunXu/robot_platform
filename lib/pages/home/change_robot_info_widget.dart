@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:robot_platform/redux/actions/robot_info_action.dart';
 import 'package:robot_platform/widgets/common_card.dart';
 import 'package:dio/dio.dart';

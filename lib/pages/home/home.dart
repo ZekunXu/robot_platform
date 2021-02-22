@@ -2,7 +2,6 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:robot_platform/widgets/common_card.dart';
 import 'package:robot_platform/services/robot_info_service.dart';
 
@@ -148,7 +147,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Auto
         this.robotInfoList[_tabController.index] = value;
       });
     });
-    Fluttertoast.showToast(msg: "刷新成功");
   }
 
   bool get wantKeepAlive=>true;
@@ -350,7 +348,6 @@ class _RobotWebCamCardState extends State<RobotWebCamCard> {
                       this._currentButton = index;
                     });
                     _getNetworkReady(url: _url);
-                    Fluttertoast.showToast(msg: "直播信号加载中，请耐心等待");
                   },
                   child: Text(_name),
                 textColor: _currentButton == index ? Theme.of(context).buttonTheme.colorScheme.primary : Theme.of(context).buttonTheme.colorScheme.onSurface,

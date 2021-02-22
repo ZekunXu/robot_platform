@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:robot_platform/widgets/color_theme/my_color.dart';
 import 'package:robot_platform/widgets/common_card.dart';
 
 class ConnectPage extends StatefulWidget {
@@ -95,8 +93,6 @@ class _ConnectPageState extends State<ConnectPage> {
         this.deviceList[1]["status"] = "在线";
       });
     });
-
-    Fluttertoast.showToast(msg: "更新成功");
   }
 
 

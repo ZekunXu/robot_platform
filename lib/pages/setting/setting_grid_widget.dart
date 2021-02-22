@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:install_plugin/install_plugin.dart';
 import 'package:package_info/package_info.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
@@ -96,7 +95,6 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
         String platform = Platform.isAndroid ? "android" : "ios";
         if(platform ==  "ios"){
-          return Fluttertoast.showToast(msg: "ios 版本无法更新哦");
         }
         _checkUpdate();
         break;
@@ -104,7 +102,6 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
         Application.router.navigateTo(context, '/test');
         break;
       default:
-        Fluttertoast.showToast(msg: "你点击了 ${widget.content[index]}");
         break;
     }
   }
@@ -132,7 +129,6 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
                         new MaterialPageRoute(
                             builder: (context) => IndexPage()),
                         (route) => route == null);
-                    Fluttertoast.showToast(msg: "已经退出登录");
                   },
                   child: Text(
                     "确定",
@@ -173,7 +169,6 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
                 FlatButton(
                     onPressed: () async {
                       Navigator.of(context).pop();
-                      Fluttertoast.showToast(msg: "开始下载...不要重复点击哦");
                       File apkFile =
                           await downloadApp(url: data["data"]["downloadlink"]);
                       String apkFilePath = apkFile.path;
@@ -196,12 +191,9 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
     }).catchError((err) {
       switch (err) {
         case "newest":
-          return Fluttertoast.showToast(msg: "当前已经是最新版本");
           break;
         case "download_fail":
-          return Fluttertoast.showToast(msg: "下载文件失败");
         default:
-          return Fluttertoast.showToast(msg: err.toString());
           break;
       }
     });

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:robot_platform/services/session_service.dart';
 import 'session_title_widget.dart';
 import 'package:robot_platform/widgets/common_text_field.dart';
@@ -108,9 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _handleRegister(){
     if(this.password == null || this.username == null || this.confirmedPassword == null){
-      return Fluttertoast.showToast(msg: "请输入完整信息");
     }else if(this.password != this.confirmedPassword){
-      return Fluttertoast.showToast(msg: "密码输入不匹配");
     }
 
     Map data = {"username": this.username, "password": this.password};
@@ -120,11 +117,9 @@ class _RegisterPageState extends State<RegisterPage> {
         var response = json.decode(value.data);
         switch(response["msg"]){
           case "successful to store new session":
-            Fluttertoast.showToast(msg: "注册成功，前往登录");
             Navigator.of(context).pop();
             break;
           case "account already exist":
-            Fluttertoast.showToast(msg: "账号名重复");
         }
     })
       .catchError((err){

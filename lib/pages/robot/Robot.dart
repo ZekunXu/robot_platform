@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:robot_platform/services/robot_info_service.dart';
 import 'package:robot_platform/widgets/common_card.dart';
 import 'dart:convert';

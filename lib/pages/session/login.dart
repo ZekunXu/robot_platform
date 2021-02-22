@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
 import 'package:robot_platform/pages/index.dart';
 import 'package:robot_platform/pages/session/session_title_widget.dart';
@@ -125,7 +124,6 @@ class _LoginPageState extends State<LoginPage> {
 
   _handleLogin(_ViewModel viewModel) {
     if (this.username == null || this.password == null) {
-      return Fluttertoast.showToast(msg: "账号或者密码不能为空");
     }
 
     final Map loginInfo = {
@@ -137,20 +135,20 @@ class _LoginPageState extends State<LoginPage> {
       var data = json.decode(value.data);
       switch(data["msg"]){
         case "username or password is wrong":
-          Fluttertoast.showToast(msg: "用户名或密码错误");
           break;
         case "success":
           viewModel.onSetUsername(data["param"]["username"]);
           _saveIdentity(level: data["param"]["level"], viewModel: viewModel);
           _saveToken(token: data["param"]["token"]);
-          Fluttertoast.showToast(msg: "登录成功");
           viewModel.onSetLoginState(true);
           Navigator.of(context).pushAndRemoveUntil(
               new MaterialPageRoute(builder: (context) => IndexPage()),
                   (route) => route == null);
           break;
       }
-    }).catchError((err) => Fluttertoast.showToast(msg: err.toString()));
+    }).catchError((err){
+      return null;
+    });
   }
 
   _saveToken({@required String token}) async {

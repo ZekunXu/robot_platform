@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
@@ -13,7 +12,6 @@ getInstanceMessage() async {
   channel.stream.listen((event) {
     if(event != "ping"){
       Map<String, dynamic> response = jsonDecode(event);
-      Fluttertoast.showToast(msg: response.toString());
     }
   });
 }

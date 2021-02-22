@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
 import 'package:robot_platform/configs/configure_routes.dart';
 import 'package:robot_platform/services/session_service.dart';
@@ -131,14 +130,11 @@ class _MyAppState extends State<MyApp> {
         }
         return sendJgRegisterID(id: value, token: token);
       }).then((value) {
-        Fluttertoast.showToast(msg: "推送连接成功");
       }).catchError((err) {
         switch (err) {
           case 101:
-            Fluttertoast.showToast(msg: "registerID 获取为空");
             break;
           default:
-            Fluttertoast.showToast(msg: "registerID获取错误: $err");
             break;
         }
       });
