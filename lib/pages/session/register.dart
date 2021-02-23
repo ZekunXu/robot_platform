@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:robot_platform/services/session_service.dart';
 import 'session_title_widget.dart';
@@ -118,8 +119,17 @@ class _RegisterPageState extends State<RegisterPage> {
         switch(response["msg"]){
           case "successful to store new session":
             Navigator.of(context).pop();
+            return Flushbar(
+              title: "注册成功",
+              message: "即将跳转到登录页面",
+            );
             break;
           case "account already exist":
+            return Flushbar(
+              title: "注册失败",
+              message: "账号已经存在，或者两次密码输入不相同，请重试",
+              duration: Duration(seconds: 2),
+            );
         }
     })
       .catchError((err){

@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -347,6 +348,12 @@ class _RobotWebCamCardState extends State<RobotWebCamCard> {
                     setState(() {
                       this._currentButton = index;
                     });
+                    Flushbar(
+                      title: "开始直播",
+                      message: "直播信号加载中，请闹心等待",
+                      flushbarPosition: FlushbarPosition.TOP,
+                      duration: Duration(seconds: 2),
+                    );
                     _getNetworkReady(url: _url);
                   },
                   child: Text(_name),
