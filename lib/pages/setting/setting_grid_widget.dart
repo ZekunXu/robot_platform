@@ -17,6 +17,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingGridWidget extends StatefulWidget {
   final List<String> content;
@@ -32,6 +33,7 @@ class SettingGridWidget extends StatefulWidget {
 class _SettingGridWidgetState extends State<SettingGridWidget> {
   String debugLable = 'Unknown';
   final JPush jpush = new JPush();
+  String _updateUrl = "https://www.pgyer.com/LUsb";
 
   @override
   void initState() {
@@ -96,6 +98,11 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
         String platform = Platform.isAndroid ? "android" : "ios";
         if(platform ==  "ios"){
+          return Flushbar(
+            title: "无法获取更新",
+            message: "ios版本无法获取更新哦，请从 testflight 或者 app store 获取更新",
+            duration: Duration(seconds: 4),
+          );
         }
         _checkUpdate();
         break;
@@ -151,8 +158,6 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;
     String build = packageInfo.buildNumber;
-    String packageName = packageInfo.packageName;
-    String platform = Platform.isAndroid ? "android" : "ios";
     getAppUpdateInfo().then((value) async {
       var data = json.decode(value.data);
       if (version == data["data"]["version"] &&
@@ -176,19 +181,23 @@ class _SettingGridWidgetState extends State<SettingGridWidget> {
                     )),
                 FlatButton(
                     onPressed: () async {
+                      // Navigator.of(context).pop();
+                      // File apkFile =
+                      //     await downloadApp(url: data["data"]["downloadlink"]);
+                      // String apkFilePath = apkFile.path;
+                      // if (apkFilePath.isEmpty) {
+                      //   throw "download_fail";
+                      // }
+                      // InstallPlugin.installApk(apkFilePath, packageName)
+                      //     .then((value) {
+                      //   print("install apk $value");
+                      // }).catchError((err) {
+                      //   print("install apk err: $err");
+                      // });
                       Navigator.of(context).pop();
-                      File apkFile =
-                          await downloadApp(url: data["data"]["downloadlink"]);
-                      String apkFilePath = apkFile.path;
-                      if (apkFilePath.isEmpty) {
-                        throw "download_fail";
-                      }
-                      InstallPlugin.installApk(apkFilePath, packageName)
-                          .then((value) {
-                        print("install apk $value");
-                      }).catchError((err) {
-                        print("install apk err: $err");
-                      });
+                      await canLaunch(_updateUrl) ? await launch(_updateUrl) : throw Flushbar(
+                        title: "无法获取更新，未知错误",
+                      );
                     },
                     child: Text(
                       "现在更新",

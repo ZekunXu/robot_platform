@@ -11,6 +11,11 @@
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
         android:persistent="true">
+        <!-- 这里是高德地图配置时需要输入的 key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="194d903c7eb726410408f01dc8374093">
+        </meta-data>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

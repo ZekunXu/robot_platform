@@ -29,7 +29,7 @@ dependencies:
   fluro: ^1.7.4
   redux: ^4.0.0+3
   flutter_redux: ^0.7.0
-  url_launcher: ^5.7.0
+  url_launcher: ^5.7.10
   shared_preferences: ^0.5.12+4
   image_picker: ^0.6.7+7
   cookie_jar: ^1.0.1
@@ -46,6 +46,8 @@ dependencies:
   permission_handler: ^5.0.1+1
   extended_tabs: ^1.0.1
   another_flushbar: ^1.10.10
+  flutter_xupdate: ^1.0.2
+  amap_flutter_map: ^1.0.2
   ros_nodes:
     git:
       url: git://github.com/ZekunXu/ros_nodes.git

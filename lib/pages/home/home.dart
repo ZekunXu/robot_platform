@@ -320,7 +320,7 @@ class _RobotWebCamCardState extends State<RobotWebCamCard> {
                       Center(child: CircularProgressIndicator()),
                     )
                         : Image.network(
-                      "https://pic1.zhimg.com/v2-d9fc437d3d4a89ca85c3a5dd7201787f_1440w.jpg?source=172ae18b",
+                      "http://www.chenkeai.com:3001/assets/appImgs/webcam_placeholder.jpg",
                       fit: BoxFit.cover,
                     ),
                   ),

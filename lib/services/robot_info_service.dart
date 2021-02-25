@@ -68,8 +68,6 @@ Future<List> getRobotInfoToList() async {
         ];
       }
 
-      print(urlList.toString());
-
       return {
         "name": e["name"],
         "hardwareID": e["hardwareID"],

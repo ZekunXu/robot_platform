@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:robot_platform/configs/configure_global_param.dart';
@@ -124,6 +125,10 @@ class _LoginPageState extends State<LoginPage> {
 
   _handleLogin(_ViewModel viewModel) {
     if (this.username == null || this.password == null) {
+      return Flushbar(
+        title: "登录失败",
+        message: "账号名或密码不能为空",
+      );
     }
 
     final Map loginInfo = {
@@ -135,6 +140,10 @@ class _LoginPageState extends State<LoginPage> {
       var data = json.decode(value.data);
       switch(data["msg"]){
         case "username or password is wrong":
+          return Flushbar(
+            title: "登录失败",
+            message: "账号名或密码错误，请重试",
+          );
           break;
         case "success":
           viewModel.onSetUsername(data["param"]["username"]);
@@ -144,6 +153,10 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.of(context).pushAndRemoveUntil(
               new MaterialPageRoute(builder: (context) => IndexPage()),
                   (route) => route == null);
+          return Flushbar(
+            title: "登录成功",
+            message: "",
+          );
           break;
       }
     }).catchError((err){

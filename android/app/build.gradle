@@ -54,12 +54,33 @@ android {
         ]
     }
 
+    // 高德地图中需要使用的到的签名信息
+    signingConfigs {
+        release {
+            keyAlias 'version1'
+            keyPassword 'xzk@0602'
+            storeFile file('../../certification/robot_platform.jks')
+            storePassword 'xzk@0602'
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
+        profile {
+            signingConfig signingConfigs.release
+        }
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
+    }
+
+    packagingOptions {
+        exclude 'assets/location_map_gps_locked.png'
+        exclude 'assets/location_map_gps_3d.png'
     }
 }
 
@@ -68,6 +89,7 @@ flutter {
 }
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'cn.jiguang.sdk.plugin:fcm:3.9.1'
     implementation 'com.google.firebase:firebase-core:17.0.0'
@@ -75,6 +97,13 @@ dependencies {
     implementation 'cn.jiguang.sdk:jpush:3.9.1'  // 此处以JPush 3.8.6 版本为例。
     implementation 'cn.jiguang.sdk:jcore:2.6.0'  // 此处以JCore 2.6.0 版本为例。
     implementation 'cn.jiguang.sdk.plugin:xiaomi:3.9.1'
+    //高德2D地图
+    implementation 'com.amap.api:map2d:latest.integration'
+    //高德地图定位功能
+    implementation 'com.amap.api:location:latest.integration'
+    //高德地图搜索功能
+    implementation 'com.amap.api:search:latest.integration'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
