@@ -48,6 +48,7 @@ dependencies:
   another_flushbar: ^1.10.10
   flutter_xupdate: ^1.0.2
   amap_flutter_map: ^1.0.2
+  amap_flutter_base: ^1.0.2
   ros_nodes:
     git:
       url: git://github.com/ZekunXu/ros_nodes.git

@@ -55,26 +55,26 @@ android {
     }
 
     // 高德地图中需要使用的到的签名信息
-    signingConfigs {
-        release {
-            keyAlias 'version1'
-            keyPassword 'xzk@0602'
-            storeFile file('../../certification/robot_platform.jks')
-            storePassword 'xzk@0602'
-        }
-    }
+//    signingConfigs {
+//        release {
+//            keyAlias 'version1'
+//            keyPassword 'xzk@0602'
+//            storeFile file('../../certification/robot_platform.jks')
+//            storePassword 'xzk@0602'
+//        }
+//    }
 
     buildTypes {
-        debug {
-            signingConfig signingConfigs.release
-        }
-        profile {
-            signingConfig signingConfigs.release
-        }
+//        debug {
+//            signingConfig signingConfigs.release
+//        }
+//        profile {
+//            signingConfig signingConfigs.release
+//        }
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
     }
 
@@ -103,6 +103,8 @@ dependencies {
     implementation 'com.amap.api:location:latest.integration'
     //高德地图搜索功能
     implementation 'com.amap.api:search:latest.integration'
+    //高德地图导航功能
+    implementation 'com.amap.api:navi-3dmap:latest.integration'
 
 }
 

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:robot_platform/widgets/common_card.dart';
 import 'package:robot_platform/services/robot_info_service.dart';
+import 'package:amap_flutter_map/amap_flutter_map.dart';
+import 'package:amap_flutter_base/amap_flutter_base.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -99,6 +101,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Auto
                                 vlcPlayerControllerCallback: (url)=> _initializeVlcPlayer(url: url),
                               ),
                               Padding(padding: EdgeInsets.only(top: 10),),
+                              RobotLocationCard(),
                               Padding(padding: EdgeInsets.only(bottom: 100)),
                             ],
                           ),
@@ -393,5 +396,105 @@ class _RobotWebCamCardState extends State<RobotWebCamCard> {
       await widget.vlcPlayerController.play();
     }
     widget.isPauseCallback(!widget.isPause);
+  }
+}
+
+class RobotLocationCard extends StatefulWidget {
+  RobotLocationCard({Key key}): super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _RobotLocationCardState();
+  }
+}
+
+class _RobotLocationCardState extends State<RobotLocationCard> {
+
+  static final CameraPosition _kInitialPosition = const CameraPosition(
+    target: LatLng(28.192646244226978, 112.97670573437703),
+    zoom: 16.0,
+  );
+  List<Widget> _approvalNumberWidget = List<Widget>();
+
+  @override
+  Widget build(BuildContext context) {
+
+    AMapWidget map = AMapWidget(
+      compassEnabled: true,
+      initialCameraPosition: _kInitialPosition,
+      onMapCreated: onMapCreated,
+      myLocationStyleOptions: MyLocationStyleOptions(
+          true
+      ),
+      onCameraMove: (cameraPosition){
+        print("--------------$cameraPosition");
+      },
+    );
+
+
+    return MyCard(
+      child: ConstrainedBox(
+        constraints: BoxConstraints.expand(width: MediaQuery.of(context).size.width, height: 160),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              height: 160,
+              width: MediaQuery.of(context).size.width,
+              child: map,
+            ),
+            Positioned(
+                bottom: 20,
+                right: 20,
+                child: IconButton(
+                  iconSize: 30,
+                  icon: Icon(Icons.my_location, color: Theme.of(context).primaryColor,),
+                  onPressed: (){
+                    _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(28.192646244226978, 112.97670573437703), zoom: 17.0)), duration: 250);
+                  },
+                )),
+            Center(
+              child: Material(
+                elevation: 5.0,
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                child: CircleAvatar(
+                  radius: 10,
+                  backgroundColor: Theme.of(context).primaryColor,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  AMapController _mapController;
+  void onMapCreated(AMapController controller) {
+    setState(() {
+      _mapController = controller;
+      getApprovalNumber();
+    });
+  }
+
+  /// 获取审图号
+  void getApprovalNumber() async {
+    //普通地图审图号
+    String mapContentApprovalNumber =
+    await _mapController?.getMapContentApprovalNumber();
+    //卫星地图审图号
+    String satelliteImageApprovalNumber =
+    await _mapController?.getSatelliteImageApprovalNumber();
+    setState(() {
+      if (null != mapContentApprovalNumber) {
+        _approvalNumberWidget.add(Text(mapContentApprovalNumber));
+      }
+      if (null != satelliteImageApprovalNumber) {
+        _approvalNumberWidget.add(Text(satelliteImageApprovalNumber));
+      }
+    });
+    print('地图审图号（普通地图）: $mapContentApprovalNumber');
+    print('地图审图号（卫星地图): $satelliteImageApprovalNumber');
   }
 }

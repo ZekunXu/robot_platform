@@ -17,7 +17,7 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage>{
 
   static final CameraPosition _kInitialPosition = const CameraPosition(
-    target: LatLng(28.19243230177018, 112.97671512210843),
+    target: LatLng(28.192646244226978, 112.97670573437703),
     zoom: 16.0,
   );
   List<Widget> _approvalNumberWidget = List<Widget>();
@@ -35,15 +35,19 @@ class _TestPageState extends State<TestPage>{
   @override
   Widget build(BuildContext context) {
 
-    final AMapWidget map = AMapWidget(
+   AMapWidget map = AMapWidget(
+     compassEnabled: true,
       initialCameraPosition: _kInitialPosition,
       onMapCreated: onMapCreated,
+      myLocationStyleOptions: MyLocationStyleOptions(
+        true
+      ),
+     onCameraMove: (cameraPosition){
+        print("--------------$cameraPosition");
+     },
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Hello World!"),
-      ),
       body: ConstrainedBox(
         constraints: BoxConstraints.expand(),
         child: Stack(
@@ -55,18 +59,19 @@ class _TestPageState extends State<TestPage>{
               child: map,
             ),
             Positioned(
-                right: 10,
-                bottom: 15,
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: _approvalNumberWidget),
+              bottom: 20,
+                right: 20,
+                child: IconButton(
+                  iconSize: 30,
+                  icon: Icon(Icons.my_location, color: Theme.of(context).primaryColor,),
+                  onPressed: (){
+                    _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(28.192646244226978, 112.97670573437703), zoom: 17.0)), duration: 250);
+                  },
                 )),
             Center(
               child: Material(
                 elevation: 5.0,
-                borderRadius: BorderRadius.all(Radius.circular(100.0)),
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
                 child: CircleAvatar(
                   radius: 10,
                   backgroundColor: Theme.of(context).primaryColor,
