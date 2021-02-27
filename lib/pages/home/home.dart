@@ -1,6 +1,8 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:robot_platform/widgets/common_card.dart';
@@ -101,7 +103,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Auto
                                 vlcPlayerControllerCallback: (url)=> _initializeVlcPlayer(url: url),
                               ),
                               Padding(padding: EdgeInsets.only(top: 10),),
-                              RobotLocationCard(),
+                              RobotLocationCard(GPSLocation: e["GPSLocation"],),
                               Padding(padding: EdgeInsets.only(bottom: 100)),
                             ],
                           ),
@@ -400,7 +402,10 @@ class _RobotWebCamCardState extends State<RobotWebCamCard> {
 }
 
 class RobotLocationCard extends StatefulWidget {
-  RobotLocationCard({Key key}): super(key: key);
+
+  Map GPSLocation;
+
+  RobotLocationCard({Key key, this.GPSLocation}): super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -410,16 +415,27 @@ class RobotLocationCard extends StatefulWidget {
 
 class _RobotLocationCardState extends State<RobotLocationCard> {
 
-  static final CameraPosition _kInitialPosition = const CameraPosition(
-    target: LatLng(28.192646244226978, 112.97670573437703),
-    zoom: 16.0,
-  );
+
   List<Widget> _approvalNumberWidget = List<Widget>();
 
   @override
   Widget build(BuildContext context) {
+    final double _initLatitude = 28.192646244226978;
+    final double _initLongitude = 112.97670573437703;
+
+    final CameraPosition _kInitialPosition = CameraPosition(
+      target: LatLng(widget.GPSLocation["latitude"] ?? _initLatitude, widget.GPSLocation["longitude"] ?? _initLongitude),
+      zoom: 16.0,
+    );
+
+    LatLng _initGPS = LatLng(widget.GPSLocation["latitude"] ?? _initLatitude, widget.GPSLocation["longitude"] ?? _initLongitude);
 
     AMapWidget map = AMapWidget(
+      gestureRecognizers: {
+        Factory<OneSequenceGestureRecognizer>(
+            () => EagerGestureRecognizer(),
+        ),
+      },
       compassEnabled: true,
       initialCameraPosition: _kInitialPosition,
       onMapCreated: onMapCreated,
@@ -433,13 +449,13 @@ class _RobotLocationCardState extends State<RobotLocationCard> {
 
 
     return MyCard(
-      child: ConstrainedBox(
-        constraints: BoxConstraints.expand(width: MediaQuery.of(context).size.width, height: 160),
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
         child: Stack(
           alignment: Alignment.center,
           children: [
             Container(
-              height: 160,
+              height: 250,
               width: MediaQuery.of(context).size.width,
               child: map,
             ),
@@ -450,7 +466,7 @@ class _RobotLocationCardState extends State<RobotLocationCard> {
                   iconSize: 30,
                   icon: Icon(Icons.my_location, color: Theme.of(context).primaryColor,),
                   onPressed: (){
-                    _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(28.192646244226978, 112.97670573437703), zoom: 17.0)), duration: 250);
+                    _mapController.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: _initGPS, zoom: 17.0)), duration: 250);
                   },
                 )),
             Center(

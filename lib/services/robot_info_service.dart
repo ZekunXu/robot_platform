@@ -76,6 +76,7 @@ Future<List> getRobotInfoToList() async {
         "power": e["power"]["percentage"],
         "powerUpdateTime": e["power"]["timestamp"],
         "hardwareType": e["hardwareType"],
+        "GPSLocation": e["location"],
         "WebCams": urlList,
       };
   }).toList();
